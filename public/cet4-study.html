@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>四级冲刺 · 12天提分计划</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+:root {
+  --primary: #6366F1;
+  --primary-l: #818CF8;
+  --primary-d: #4F46E5;
+  --accent: #F472B6;
+  --green: #34D399;
+  --yellow: #FBBF24;
+  --red: #F87171;
+  --cyan: #22D3EE;
+  --bg: #0B0F1A;
+  --glass: rgba(255,255,255,0.04);
+  --glass2: rgba(255,255,255,0.07);
+  --glass3: rgba(255,255,255,0.10);
+  --text: #F1F5F9;
+  --text2: #94A3B8;
+  --text3: #64748B;
+  --border: rgba(255,255,255,0.08);
+  --r: 16px;
+  --shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Inter',-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ===== Animated BG ===== */
+.bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.bg-orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.15;animation:float 20s ease-in-out infinite;}
+.bg-orb.o1{width:500px;height:500px;background:#6366F1;top:-10%;left:-10%;animation-delay:0s;}
+.bg-orb.o2{width:400px;height:400px;background:#EC4899;bottom:-10%;right:-10%;animation-delay:-7s;}
+.bg-orb.o3{width:300px;height:300px;background:#06B6D4;top:40%;left:50%;animation-delay:-14s;}
+@keyframes float{
+  0%,100%{transform:translate(0,0) scale(1);}
+  33%{transform:translate(30px,-40px) scale(1.1);}
+  66%{transform:translate(-20px,30px) scale(0.9);}
+}
+
+/* ===== Noise overlay ===== */
+body::before{
+  content:'';position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity:.4;
+}
+
+/* ===== Container ===== */
+.app{position:relative;z-index:2;max-width:480px;margin:0 auto;padding-bottom:100px;}
+
+/* ===== Hero ===== */
+.hero{
+  padding:40px 20px 24px;text-align:center;
+  background:linear-gradient(180deg,rgba(99,102,241,.08) 0%,transparent 100%);
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:4px 14px;border-radius:20px;
+  background:var(--glass2);border:1px solid var(--border);
+  font-size:.75rem;color:var(--text2);margin-bottom:16px;
+  backdrop-filter:blur(10px);
+}
+.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+.hero h1{font-size:1.6rem;font-weight:800;letter-spacing:-.02em;margin-bottom:4px;}
+.hero h1 span{background:linear-gradient(135deg,var(--primary-l),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero-sub{color:var(--text2);font-size:.85rem;margin-bottom:20px;}
+
+.countdown-ring{
+  display:inline-flex;flex-direction:column;align-items:center;
+  padding:16px 32px;border-radius:var(--r);
+  background:var(--glass);border:1px solid var(--border);
+  backdrop-filter:blur(20px);
+}
+.countdown-ring .num{
+  font-size:3rem;font-weight:900;
+  background:linear-gradient(135deg,var(--yellow),#F97316);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  line-height:1;
+}
+.countdown-ring .label{font-size:.75rem;color:var(--text3);margin-top:2px;}
+
+/* ===== Bottom Nav ===== */
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:100;
+  background:rgba(11,15,26,.9);backdrop-filter:blur(20px);
+  border-top:1px solid var(--border);
+  display:flex;justify-content:space-around;
+  padding:8px 4px max(8px,env(safe-area-inset-bottom));
+}
+.bottom-nav button{
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  background:none;border:none;color:var(--text3);font-size:.6rem;
+  cursor:pointer;padding:6px 8px;border-radius:10px;transition:.2s;
+  min-width:44px;
+}
+.bottom-nav button .icon{font-size:1.2rem;line-height:1;}
+.bottom-nav button.active{color:var(--primary-l);background:rgba(99,102,241,.12);}
+
+/* ===== Sections ===== */
+.section{display:none;animation:fadeUp .35s ease;}
+.section.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+/* ===== Glass Card ===== */
+.card{
+  background:var(--glass);border:1px solid var(--border);
+  border-radius:var(--r);padding:20px;margin:0 16px 16px;
+  backdrop-filter:blur(16px);transition:.2s;
+}
+.card:hover{border-color:rgba(255,255,255,.12);}
+.card h2{font-size:1rem;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.card h3{font-size:.9rem;margin:14px 0 8px;color:var(--primary-l);font-weight:600;}
+
+/* ===== Buttons ===== */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  padding:10px 20px;border:none;border-radius:10px;
+  font-size:.85rem;font-weight:600;cursor:pointer;transition:.15s;
+  font-family:inherit;
+}
+.btn:active{transform:scale(.97);}
+.btn-p{background:linear-gradient(135deg,var(--primary),var(--primary-d));color:#fff;}
+.btn-p:hover{box-shadow:0 4px 20px rgba(99,102,241,.4);}
+.btn-g{background:linear-gradient(135deg,var(--green),#059669);color:#fff;}
+.btn-w{background:linear-gradient(135deg,var(--yellow),#F97316);color:#000;}
+.btn-r{background:linear-gradient(135deg,var(--red),#DC2626);color:#fff;}
+.btn-sm{padding:7px 14px;font-size:.8rem;border-radius:8px;}
+.btn-ghost{
+  background:var(--glass2);color:var(--text);border:1px solid var(--border);
+}
+.btn-ghost:hover{border-color:var(--primary-l);color:var(--primary-l);}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+
+/* ===== Progress ===== */
+.progress{height:6px;background:var(--glass2);border-radius:3px;overflow:hidden;}
+.progress .fill{
+  height:100%;border-radius:3px;
+  background:linear-gradient(90deg,var(--primary),var(--accent));
+  transition:width .6s cubic-bezier(.23,1,.32,1);
+}
+
+/* ===== Tags ===== */
+.tag{
+  display:inline-block;padding:2px 8px;border-radius:5px;
+  font-size:.65rem;font-weight:700;margin-right:6px;letter-spacing:.02em;
+}
+.tag-w{background:rgba(52,211,153,.15);color:var(--green);}
+.tag-l{background:rgba(34,212,238,.15);color:var(--cyan);}
+.tag-r{background:rgba(129,140,248,.15);color:var(--primary-l);}
+.tag-wr{background:rgba(251,191,36,.15);color:var(--yellow);}
+.tag-t{background:rgba(244,114,182,.15);color:var(--accent);}
+.tag-m{background:rgba(248,113,113,.15);color:var(--red);}
+
+/* ===== Day Cards ===== */
+.day-card{
+  background:var(--glass);border:1px solid var(--border);
+  border-radius:var(--r);margin:0 16px 12px;overflow:hidden;
+  backdrop-filter:blur(16px);transition:.25s;
+}
+.day-card.today{border-color:rgba(99,102,241,.4);box-shadow:0 0 30px rgba(99,102,241,.08);}
+.day-card.done{border-color:rgba(52,211,153,.3);}
+.day-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 16px;cursor:pointer;transition:.15s;user-select:none;
+}
+.day-head:hover{background:rgba(255,255,255,.02);}
+.day-head .left{display:flex;align-items:center;gap:10px;font-weight:700;font-size:.9rem;}
+.day-head .right{font-size:.75rem;color:var(--text3);}
+.day-head .chevron{transition:.25s;font-size:.7rem;color:var(--text3);}
+.day-card.open .day-head .chevron{transform:rotate(90deg);}
+.day-body{padding:0 16px 16px;display:none;}
+.day-card.open .day-body{display:block;animation:fadeUp .25s ease;}
+
+.task{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:10px 0;border-bottom:1px solid var(--border);
+}
+.task:last-of-type{border:none;}
+.task input[type=checkbox]{
+  width:18px;height:18px;margin-top:3px;accent-color:var(--green);
+  cursor:pointer;flex-shrink:0;
+}
+.task .txt{flex:1;font-size:.85rem;}
+.task .txt.done{text-decoration:line-through;color:var(--text3);}
+
+/* ===== Flashcard ===== */
+.fc-wrap{perspective:1200px;margin:16px 0;}
+.fc{
+  width:100%;min-height:240px;position:relative;
+  transform-style:preserve-3d;transition:transform .55s cubic-bezier(.23,1,.32,1);
+  cursor:pointer;
+}
+.fc.flipped{transform:rotateY(180deg);}
+.fc-face{
+  position:absolute;inset:0;backface-visibility:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:28px 24px;text-align:center;border-radius:var(--r);
+  border:1px solid var(--border);
+}
+.fc-front{
+  background:linear-gradient(135deg,rgba(99,102,241,.1),rgba(236,72,153,.05));
+  backdrop-filter:blur(20px);
+}
+.fc-back{
+  background:linear-gradient(135deg,rgba(6,182,212,.1),rgba(99,102,241,.05));
+  backdrop-filter:blur(20px);transform:rotateY(180deg);
+}
+.fc-word{font-size:2.2rem;font-weight:900;letter-spacing:-.02em;margin-bottom:6px;}
+.fc-phon{color:var(--text3);font-size:.9rem;margin-bottom:16px;}
+.fc-hint{color:var(--text3);font-size:.8rem;}
+.fc-mean{font-size:1.15rem;color:var(--yellow);font-weight:600;margin-bottom:10px;}
+.fc-ex{font-size:.82rem;color:var(--text2);font-style:italic;max-width:90%;line-height:1.6;}
+.fc-counter{text-align:center;color:var(--text3);font-size:.8rem;margin:10px 0;}
+.fc-actions{display:flex;gap:12px;justify-content:center;}
+
+/* ===== Word List ===== */
+.wl{max-height:420px;overflow-y:auto;border-radius:var(--r);}
+.wr{
+  display:flex;align-items:center;padding:10px 14px;gap:12px;
+  border-bottom:1px solid var(--border);transition:.15s;
+}
+.wr:hover{background:rgba(255,255,255,.02);}
+.wr .star{cursor:pointer;font-size:1.1rem;transition:.2s;flex-shrink:0;}
+.wr .star.on{color:var(--yellow);}
+.wr .w{font-weight:700;min-width:110px;font-size:.88rem;}
+.wr .m{color:var(--text2);font-size:.82rem;flex:1;}
+
+/* ===== Tips ===== */
+.tip{
+  padding:12px 16px;border-radius:10px;font-size:.85rem;
+  margin-bottom:10px;line-height:1.6;
+}
+.tip-blue{background:rgba(99,102,241,.08);border-left:3px solid var(--primary-l);}
+.tip-green{background:rgba(52,211,153,.08);border-left:3px solid var(--green);}
+.tip-yellow{background:rgba(251,191,36,.08);border-left:3px solid var(--yellow);}
+.tip-pink{background:rgba(244,114,182,.08);border-left:3px solid var(--accent);}
+
+/* ===== Strategy ===== */
+.strat{
+  padding:14px 16px;background:var(--glass2);border-radius:10px;
+  margin-bottom:8px;border:1px solid var(--border);
+}
+.strat h4{font-size:.88rem;margin-bottom:4px;font-weight:600;}
+.strat p{font-size:.8rem;color:var(--text2);line-height:1.5;}
+
+/* ===== Table ===== */
+.tbl{width:100%;border-collapse:collapse;font-size:.8rem;}
+.tbl th,.tbl td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);}
+.tbl th{color:var(--primary-l);font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;}
+
+/* ===== Reading ===== */
+.passage{
+  background:var(--glass2);padding:16px;border-radius:10px;
+  font-size:.85rem;line-height:1.85;margin-bottom:14px;
+  max-height:280px;overflow-y:auto;
+}
+.qb{margin-bottom:16px;}
+.qb .q{font-weight:600;margin-bottom:8px;font-size:.9rem;}
+.opt{
+  display:block;padding:11px 14px;margin:5px 0;
+  background:var(--glass2);border:1.5px solid var(--border);
+  border-radius:10px;cursor:pointer;transition:.15s;font-size:.85rem;
+}
+.opt:hover{border-color:rgba(99,102,241,.5);background:rgba(99,102,241,.05);}
+.opt.correct{border-color:var(--green);background:rgba(52,211,153,.1);color:#6EE7B7;}
+.opt.wrong{border-color:var(--red);background:rgba(248,113,113,.1);color:#FCA5A5;}
+.ans{
+  margin-top:8px;padding:10px 14px;border-radius:10px;font-size:.8rem;
+  line-height:1.6;display:none;
+}
+.ans.show{display:block;animation:fadeUp .3s ease;}
+.ans.ok{background:rgba(52,211,153,.08);color:#6EE7B7;}
+.ans.no{background:rgba(248,113,113,.08);color:#FCA5A5;}
+
+/* ===== Template ===== */
+.tpl{
+  background:var(--glass2);border-radius:10px;padding:16px;margin-bottom:12px;
+  border:1px solid var(--border);
+}
+.tpl h4{color:var(--primary-l);font-size:.85rem;margin-bottom:8px;font-weight:600;}
+.tpl .body{font-size:.8rem;line-height:1.8;color:var(--text2);white-space:pre-wrap;}
+.tpl .copy{margin-top:8px;}
+
+/* ===== Timer ===== */
+.timer-num{
+  font-size:4.5rem;font-weight:900;text-align:center;
+  font-variant-numeric:tabular-nums;margin:20px 0;
+  background:linear-gradient(135deg,var(--primary-l),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  line-height:1;
+}
+.timer-label{text-align:center;color:var(--text2);font-size:.85rem;margin-bottom:6px;}
+.timer-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.timer-presets{display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap;}
+
+/* ===== Score ===== */
+.score-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:12px 0;}
+.score-box{
+  background:var(--glass2);padding:16px 14px;border-radius:12px;text-align:center;
+  border:1px solid var(--border);
+}
+.score-box .v{font-size:1.8rem;font-weight:900;line-height:1;}
+.score-box .l{font-size:.7rem;color:var(--text3);margin-top:4px;}
+.in-row{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0;}
+.in-row input{
+  flex:1;min-width:70px;padding:10px 12px;
+  background:var(--glass2);border:1.5px solid var(--border);
+  border-radius:10px;color:var(--text);font-size:.9rem;outline:none;
+  font-family:inherit;transition:.2s;
+}
+.in-row input:focus{border-color:var(--primary-l);}
+.in-row input::placeholder{color:var(--text3);}
+
+/* ===== Weakness bar ===== */
+.wb{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.wb .lb{min-width:48px;font-size:.82rem;font-weight:500;}
+.wb .bar{flex:1;height:22px;background:var(--glass2);border-radius:6px;overflow:hidden;}
+.wb .bar .bf{
+  height:100%;border-radius:6px;display:flex;align-items:center;
+  justify-content:center;font-size:.65rem;font-weight:700;
+  transition:width .7s cubic-bezier(.23,1,.32,1);
+}
+.wb .val{font-size:.78rem;color:var(--text3);min-width:55px;text-align:right;}
+
+/* ===== Stats ===== */
+.stat{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);}
+.stat:last-child{border:none;}
+
+/* ===== Toast ===== */
+.toast{
+  position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:linear-gradient(135deg,var(--primary),var(--primary-d));
+  color:#fff;padding:10px 24px;border-radius:12px;font-size:.85rem;
+  z-index:200;opacity:0;transition:.3s;pointer-events:none;
+  box-shadow:0 8px 30px rgba(99,102,241,.3);font-weight:500;
+  white-space:nowrap;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ===== Confetti ===== */
+.confetti{
+  position:fixed;top:-10px;z-index:300;pointer-events:none;
+  width:10px;height:10px;border-radius:2px;
+  animation:confettiFall 3s ease-in forwards;
+}
+@keyframes confettiFall{
+  0%{opacity:1;transform:translateY(0) rotate(0deg);}
+  100%{opacity:0;transform:translateY(100vh) rotate(720deg);}
+}
+
+/* ===== Scrollbar ===== */
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+
+/* ===== Desktop Layout ===== */
+@media(min-width:768px){
+  .app{
+    max-width:960px;
+    padding-bottom:40px;
+    padding-left:220px;
+  }
+  .hero{padding:48px 32px 32px;text-align:left;}
+  .hero h1{font-size:2rem;}
+  .countdown-ring{margin-top:8px;}
+  .card{margin:0 24px 20px;padding:28px;}
+  .day-card{margin:0 24px 14px;}
+  .bottom-nav{
+    position:fixed;top:0;left:0;bottom:0;right:auto;
+    width:200px;flex-direction:column;
+    justify-content:flex-start;padding:16px 8px;
+    border-top:none;border-right:1px solid var(--border);
+    gap:2px;
+  }
+  .bottom-nav button{
+    flex-direction:row;justify-content:flex-start;
+    padding:10px 14px;font-size:.8rem;gap:10px;
+    border-radius:10px;width:100%;
+  }
+  .bottom-nav button .icon{font-size:1rem;}
+  .bottom-nav button.active{background:rgba(99,102,241,.15);}
+  .toast{bottom:30px;}
+
+  /* Two-column grids on desktop */
+  .sec-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;}
+  .sec-grid .card{margin:0 12px 16px;}
+  .sec-grid-full{grid-column:1/-1;}
+  .score-grid{grid-template-columns:repeat(4,1fr);}
+
+  /* Flashcard + stats side by side */
+  #s-words .card:first-child{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+  #s-words .card:first-child h2{grid-column:1/-1;}
+
+  /* Timer centered wider */
+  #s-timer .card:first-child{max-width:600px;margin-left:auto;margin-right:auto;}
+
+  /* Flashcard taller */
+  .fc{min-height:280px;}
+  .fc-word{font-size:2.6rem;}
+
+  /* Passage wider */
+  .passage{max-height:400px;}
+
+  /* Word list taller */
+  .wl{max-height:560px;}
+}
+@media(min-width:1200px){
+  .app{max-width:1100px;padding-left:240px;}
+  .bottom-nav{width:220px;}
+  .card{padding:32px;}
+}
+
+/* ===== Small mobile ===== */
+@media(max-width:400px){
+  .fc-word{font-size:1.7rem;}
+  .timer-num{font-size:3.5rem;}
+  .bottom-nav button{font-size:.55rem;padding:6px 4px;min-width:36px;}
+}
+</style>
+</head>
+<body>
+
+<!-- Animated BG -->
+<div class="bg-canvas">
+  <div class="bg-orb o1"></div>
+  <div class="bg-orb o2"></div>
+  <div class="bg-orb o3"></div>
+</div>
+
+<div class="app">
+
+  <!-- ===== Hero ===== -->
+  <div class="hero">
+    <div class="hero-badge"><span class="dot"></span> 四级冲刺模式已激活</div>
+    <h1>🎯 <span>12天冲刺</span> 四级</h1>
+    <p class="hero-sub">稳过425，冲刺500+</p>
+    <div class="countdown-ring">
+      <div class="num" id="cd">12</div>
+      <div class="label">距离考试还有</div>
+    </div>
+  </div>
+
+  <!-- ===== Sections ===== -->
+
+  <!-- Plan -->
+  <div class="section active" id="s-plan">
+    <div class="card">
+      <h2>📊 总体进度</h2>
+      <div class="progress"><div class="fill" id="progBar" style="width:0"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:.75rem;color:var(--text3);margin-top:6px;">
+        <span id="progTxt">0/12 天</span><span id="progPct">0%</span>
+      </div>
+    </div>
+    <div class="card">
+      <h2>💡 冲刺核心策略</h2>
+      <div class="tip tip-blue"><strong>听力+阅读=70%分数</strong>，这两项突破就能稳过425！每天精听30分钟 + 做2篇仔细阅读。</div>
+      <div class="tip tip-green">词汇贯穿全程，真题为王。每天有效学习≥2小时。</div>
+    </div>
+    <div id="dayList"></div>
+  </div>
+
+  <!-- Words -->
+  <div class="section" id="s-words">
+    <div class="card">
+      <h2>🃏 闪卡记忆</h2>
+      <p style="font-size:.8rem;color:var(--text3);margin-bottom:12px;">点击卡片翻转 · 「认识」跳过 · 「不认识」加入复习</p>
+      <div class="fc-wrap">
+        <div class="fc" id="fc" onclick="flipFC()">
+          <div class="fc-face fc-front">
+            <div class="fc-word" id="fcW"></div>
+            <div class="fc-phon" id="fcP"></div>
+            <div class="fc-hint">点击翻转 →</div>
+          </div>
+          <div class="fc-face fc-back">
+            <div class="fc-mean" id="fcM"></div>
+            <div class="fc-ex" id="fcE"></div>
+          </div>
+        </div>
+      </div>
+      <div class="fc-counter" id="fcC"></div>
+      <div class="fc-actions">
+        <button class="btn btn-r btn-sm" onclick="fcAct(0)">❌ 不会</button>
+        <button class="btn btn-g btn-sm" onclick="fcAct(1)">✅ 认识</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2>📋 词汇表</h2>
+      <div style="display:flex;gap:8px;margin-bottom:12px;">
+        <input type="text" id="wSearch" placeholder="搜索单词..." style="flex:1;padding:9px 14px;background:var(--glass2);border:1.5px solid var(--border);border-radius:10px;color:var(--text);outline:none;font-size:.85rem;font-family:inherit;">
+        <button class="btn btn-ghost btn-sm" onclick="doSearch()">🔍</button>
+      </div>
+      <div class="wl" id="wList"></div>
+    </div>
+    <div class="card">
+      <h2>📈 学习统计</h2>
+      <div class="stat"><span>已掌握</span><span id="wKnown" style="color:var(--green);font-weight:700;">0</span></div>
+      <div class="stat"><span>需复习</span><span id="wRev" style="color:var(--yellow);font-weight:700;">0</span></div>
+      <div class="stat"><span>未学习</span><span id="wNew" style="color:var(--text3);font-weight:700;">0</span></div>
+    </div>
+  </div>
+
+  <!-- Listen -->
+  <div class="section" id="s-listen">
+    <div class="card">
+      <h2>🎯 听力题型（248.5分 / 35%）</h2>
+      <table class="tbl">
+        <tr><th>题型</th><th>题数</th><th>分值</th><th>目标</th></tr>
+        <tr><td>短篇新闻</td><td>7</td><td>49.7</td><td>≥5/7</td></tr>
+        <tr><td>长对话</td><td>8</td><td>56.8</td><td>≥6/8</td></tr>
+        <tr><td>听力篇章</td><td>10</td><td>142</td><td>≥6/10</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h2>🔥 6大提分技巧</h2>
+      <div class="strat"><h4>1. 预读选项（黄金30秒）</h4><p>Directions 时间快速浏览选项，划关键词（名词/动词/数字），预判主题。</p></div>
+      <div class="strat"><h4>2. 听到即选不纠结</h4><p>听力没回头时间！听到答案直接选，犹豫会错过下一题。</p></div>
+      <div class="strat"><h4>3. 转折词=答案信号</h4><p>but / however / actually / in fact 后面大概率是答案。</p></div>
+      <div class="strat"><h4>4. 数字题必记笔记</h4><p>时间、价格、数量——听到就记，最后根据问题选。</p></div>
+      <div class="strat"><h4>5. 新闻首句定调</h4><p>首句=核心信息（5W1H），开头没听清基本凉了。</p></div>
+      <div class="strat"><h4>6. 每天精听30分钟</h4><p>第1遍做题→第2遍对照原文逐句听→第3遍跟读。12天够提1-2档！</p></div>
+    </div>
+    <div class="card">
+      <h2>📅 12天听力计划</h2>
+      <div class="tip tip-blue"><strong>Day 1-4：</strong>精听真题，重点短篇新闻（最容易提分）</div>
+      <div class="tip tip-green"><strong>Day 5-8：</strong>精听真题，重点长对话，积累场景词汇</div>
+      <div class="tip tip-yellow"><strong>Day 9-12：</strong>模拟考试环境完整做听力，训练心态节奏</div>
+    </div>
+  </div>
+
+  <!-- Read -->
+  <div class="section" id="s-read">
+    <div class="card">
+      <h2>🎯 阅读题型（248.5分 / 35%）</h2>
+      <table class="tbl">
+        <tr><th>题型</th><th>题数</th><th>分值</th><th>目标</th></tr>
+        <tr><td>选词填空</td><td>10</td><td>35.5</td><td>≥5/10</td></tr>
+        <tr><td>长篇匹配</td><td>10</td><td>71</td><td>≥7/10</td></tr>
+        <tr><td>仔细阅读</td><td>10</td><td>142</td><td>≥7/10</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h2>💡 阅读策略</h2>
+      <div class="strat"><h4>🔴 选词填空（性价比最低，最后做）</h4><p>先判断词性→上下文选词→不会就蒙，别浪费时间！</p></div>
+      <div class="strat"><h4>🟡 长篇匹配（先看题再找文）</h4><p>读10道题→划关键词→快速定位→注意同义替换！</p></div>
+      <div class="strat"><h4>🟢 仔细阅读（重中之重！每题14.2分）</h4><p>读题干→定位段落→精读→排除干扰。每篇≤10分钟。</p></div>
+      <div class="strat"><h4>⏰ 时间分配</h4><p>仔细阅读 20min → 长篇匹配 15min → 选词填空 5min</p></div>
+    </div>
+    <div class="card">
+      <h2>📝 真题练习</h2>
+      <div id="readArea"></div>
+      <div style="display:flex;gap:8px;margin-top:12px;">
+        <button class="btn btn-p btn-sm" onclick="checkRead()">提交答案</button>
+        <button class="btn btn-ghost btn-sm" onclick="nextRead()">下一篇 →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Write -->
+  <div class="section" id="s-write">
+    <div class="card">
+      <h2>✍️ 写作攻略（106.5分 / 15%）</h2>
+      <div class="tip tip-yellow"><strong>目标70+分！</strong>结构清晰 &gt; 华丽辞藻。阅卷老师每篇只看30秒！</div>
+    </div>
+    <div class="card">
+      <h2>📐 万能三段式结构</h2>
+      <div class="tpl">
+        <h4>第一段：引出话题（2-3句）</h4>
+        <div class="body" id="tpl1">Nowadays, there is a growing concern over [话题]. It is widely acknowledged that [观点]. From my perspective, I firmly believe that [你的立场].
+
+引出句型：
+• Nowadays, ... has become a hot topic among people.
+• There is a heated debate over whether...
+• With the rapid development of..., ... has drawn wide attention.</div>
+        <button class="btn btn-ghost btn-sm copy" onclick="cpTpl('tpl1')">📋 复制</button>
+      </div>
+      <div class="tpl">
+        <h4>第二段：论证（4-5句）</h4>
+        <div class="body" id="tpl2">There are several reasons accounting for my view. First and foremost, [理由1]. For instance, [举例]. In addition, [理由2]. Last but not least, [理由3].
+
+论证句型：
+• To begin with / First and foremost, ...
+• Furthermore / Moreover / In addition, ...
+• For example / For instance / A case in point is that...</div>
+        <button class="btn btn-ghost btn-sm copy" onclick="cpTpl('tpl2')">📋 复制</button>
+      </div>
+      <div class="tpl">
+        <h4>第三段：总结（2-3句）</h4>
+        <div class="body" id="tpl3">In conclusion, [重申观点]. It is high time that we took action to [建议]. Only in this way can we [美好愿景].
+
+总结句型：
+• In conclusion / All in all / To sum up, ...
+• It is high time that we should...
+• Only in this way can we...</div>
+        <button class="btn btn-ghost btn-sm copy" onclick="cpTpl('tpl3')">📋 复制</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2>🔥 词汇替换速记</h2>
+      <div class="tpl">
+        <h4>告别低级词</h4>
+        <div class="body">think → maintain / hold the view that / am convinced that
+important → vital / crucial / essential / significant
+more and more → an increasing number of / a growing number of
+very → extremely / remarkably / exceedingly
+good → beneficial / rewarding / favorable
+bad → detrimental / adverse / unfavorable
+many → numerous / a host of / a multitude of
+because → owing to / due to / on account of</div>
+      </div>
+      <div class="tpl">
+        <h4>高级句式</h4>
+        <div class="body">① 倒装：Only by doing... can we...
+② 虚拟：If I were..., I would...
+③ 强调：It is ... that...
+④ 被动：Great attention should be paid to...
+⑤ 从句：..., which is of great importance.
+⑥ 独立主格：With the development of..., ...
+⑦ 同位语：Li Ming, a student from..., believes that...</div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>📝 写作练习</h2>
+      <div id="writeP" style="margin-bottom:10px;"></div>
+      <textarea id="writeArea" placeholder="在此输入你的作文..." style="width:100%;min-height:120px;padding:12px;background:var(--glass2);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:.88rem;resize:vertical;outline:none;font-family:inherit;line-height:1.7;"></textarea>
+      <div style="display:flex;gap:8px;margin-top:8px;align-items:center;flex-wrap:wrap;">
+        <button class="btn btn-p btn-sm" onclick="countW()">📊 字数统计</button>
+        <button class="btn btn-ghost btn-sm" onclick="nextWP()">换题 →</button>
+        <span id="wc" style="font-size:.8rem;color:var(--text3);"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trans -->
+  <div class="section" id="s-trans">
+    <div class="card">
+      <h2>🔄 翻译攻略（106.5分 / 15%）</h2>
+      <div class="tip tip-pink"><strong>核心：</strong>翻的是意思不是单词！不会的词用简单词解释，千万别空着！</div>
+    </div>
+    <div class="card">
+      <h2>💡 翻译技巧</h2>
+      <div class="strat"><h4>1. 先拆分再翻译</h4><p>长句拆成短句，一个复杂句可以拆成2-3个简单句。</p></div>
+      <div class="strat"><h4>2. 不会的词就解释</h4><p>不会写"高铁"？写 fast train / high-speed railway。</p></div>
+      <div class="strat"><h4>3. 注意时态语态</h4><p>传统文化→一般现在时；历史→过去时；发展变化→现在完成时。</p></div>
+      <div class="strat"><h4>4. 5大必背话题</h4><p>传统文化、经济发展、科技创新、教育、环保——覆盖率超80%！</p></div>
+    </div>
+    <div class="card">
+      <h2>📝 翻译练习</h2>
+      <div id="transP" style="margin-bottom:10px;"></div>
+      <textarea id="transArea" placeholder="在此输入你的翻译..." style="width:100%;min-height:100px;padding:12px;background:var(--glass2);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:.88rem;resize:vertical;outline:none;font-family:inherit;line-height:1.7;"></textarea>
+      <div style="display:flex;gap:8px;margin-top:8px;">
+        <button class="btn btn-p btn-sm" onclick="showRef()">👁 参考译文</button>
+        <button class="btn btn-ghost btn-sm" onclick="nextTR()">下一题 →</button>
+      </div>
+      <div id="transRef" style="padding:12px;background:rgba(52,211,153,.06);border-radius:10px;font-size:.82rem;line-height:1.7;color:#6EE7B7;margin-top:8px;display:none;"></div>
+    </div>
+    <div class="card">
+      <h2>📚 高频话题词汇</h2>
+      <div class="tpl">
+        <h4>中国传统文化</h4>
+        <div class="body">春节 Spring Festival | 中秋节 Mid-Autumn Festival | 端午节 Dragon Boat Festival
+剪纸 paper-cutting | 书法 calligraphy | 京剧 Peking Opera
+儒家思想 Confucianism | 丝绸之路 the Silk Road | 四大发明 Four Great Inventions
+饺子 dumpling | 红包 red envelope | 对联 couplet | 灯笼 lantern</div>
+      </div>
+      <div class="tpl">
+        <h4>经济与发展</h4>
+        <div class="body">改革开放 Reform and Opening-up | 一带一路 the Belt and Road Initiative
+经济特区 Special Economic Zone | GDP | 电子商务 e-commerce
+移动支付 mobile payment | 共享经济 sharing economy
+脱贫攻坚 poverty alleviation | 小康社会 moderately prosperous society</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Timer -->
+  <div class="section" id="s-timer">
+    <div class="card" style="text-align:center;">
+      <h2 style="justify-content:center;">⏱ 番茄钟专注</h2>
+      <div class="timer-label" id="tmLabel">准备开始</div>
+      <div class="timer-num" id="tmDisp">25:00</div>
+      <div class="progress" style="margin-bottom:16px;"><div class="fill" id="tmProg" style="width:0"></div></div>
+      <div class="timer-btns">
+        <button class="btn btn-p" id="tmBtn" onclick="toggleTm()">▶ 开始专注</button>
+        <button class="btn btn-ghost" onclick="resetTm()">↺ 重置</button>
+      </div>
+      <div class="timer-presets">
+        <button class="btn btn-ghost btn-sm" onclick="setTm(25)">25min</button>
+        <button class="btn btn-ghost btn-sm" onclick="setTm(45)">45min</button>
+        <button class="btn btn-ghost btn-sm" onclick="setTm(60)">60min</button>
+        <button class="btn btn-ghost btn-sm" onclick="setTm(5)">休息5min</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2>📊 今日统计</h2>
+      <div class="stat"><span>完成番茄数</span><span id="pmC" style="color:var(--yellow);font-weight:700;">0</span></div>
+      <div class="stat"><span>总专注时长</span><span id="pmT" style="color:var(--green);font-weight:700;">0 分钟</span></div>
+    </div>
+  </div>
+
+  <!-- Score -->
+  <div class="section" id="s-score">
+    <div class="card">
+      <h2>📊 成绩概览</h2>
+      <div class="score-grid">
+        <div class="score-box"><div class="v" style="color:var(--primary-l);" id="sBest">--</div><div class="l">最高分</div></div>
+        <div class="score-box"><div class="v" style="color:var(--yellow);" id="sAvg">--</div><div class="l">平均分</div></div>
+        <div class="score-box"><div class="v" style="color:var(--green);" id="sCnt">0</div><div class="l">模考次数</div></div>
+        <div class="score-box"><div class="v" style="color:var(--accent);" id="sGap">--</div><div class="l">距目标</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>➕ 录入成绩</h2>
+      <div class="in-row">
+        <input type="number" id="inL" placeholder="听力">
+        <input type="number" id="inR" placeholder="阅读">
+        <input type="number" id="inW" placeholder="写作">
+        <input type="number" id="inT" placeholder="翻译">
+      </div>
+      <button class="btn btn-p" onclick="addSc()" style="width:100%;">📝 保存成绩</button>
+    </div>
+    <div class="card">
+      <h2>📈 能力分析</h2>
+      <div id="weakBars"></div>
+    </div>
+    <div class="card">
+      <h2>📋 历史记录</h2>
+      <div id="scHist" style="font-size:.82rem;"></div>
+    </div>
+    <div class="card">
+      <h2>🎯 目标设置</h2>
+      <div class="in-row">
+        <input type="number" id="tgtIn" placeholder="目标总分" value="500">
+        <button class="btn btn-p btn-sm" onclick="saveTgt()">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Exam -->
+  <div class="section" id="s-exam">
+    <div class="card">
+      <h2>📋 考试结构</h2>
+      <table class="tbl">
+        <tr><th>部分</th><th>内容</th><th>时间</th><th>分值</th></tr>
+        <tr><td>写作</td><td>短文 1篇</td><td>30min</td><td>106.5 (15%)</td></tr>
+        <tr><td>听力</td><td>新闻+对话+篇章</td><td>25min</td><td>248.5 (35%)</td></tr>
+        <tr><td>阅读</td><td>选词+匹配+仔细</td><td>40min</td><td>248.5 (35%)</td></tr>
+        <tr><td>翻译</td><td>汉译英 1篇</td><td>30min</td><td>106.5 (15%)</td></tr>
+      </table>
+      <div class="tip tip-blue" style="margin-top:12px;"><strong>总分710，425及格。</strong>听力+阅读占70%（497分），是提分关键！</div>
+    </div>
+    <div class="card">
+      <h2>⏰ 考试时间线</h2>
+      <div class="strat"><h4>9:00-9:40 写作</h4><p>审题→列提纲→动笔。留2min检查语法。</p></div>
+      <div class="strat"><h4>9:40-10:05 听力</h4><p>Directions 时间预读选项！听力结束立即收答题卡1。</p></div>
+      <div class="strat"><h4>10:05-10:45 阅读</h4><p>仔细阅读→长篇匹配→选词填空。仔细阅读每题14.2分！</p></div>
+      <div class="strat"><h4>10:45-11:15 翻译</h4><p>拆分长句→简单句翻译→检查时态单复数。</p></div>
+    </div>
+    <div class="card">
+      <h2>🎒 考前清单</h2>
+      <div class="task"><input type="checkbox" id="ck1"><label for="ck1" class="txt">准考证</label></div>
+      <div class="task"><input type="checkbox" id="ck2"><label for="ck2" class="txt">身份证</label></div>
+      <div class="task"><input type="checkbox" id="ck3"><label for="ck3" class="txt">2B铅笔 + 橡皮</label></div>
+      <div class="task"><input type="checkbox" id="ck4"><label for="ck4" class="txt">黑色签字笔（≥2支）</label></div>
+      <div class="task"><input type="checkbox" id="ck5"><label for="ck5" class="txt">耳机 / 收音机</label></div>
+      <div class="task"><input type="checkbox" id="ck6"><label for="ck6" class="txt">手表（非智能）</label></div>
+    </div>
+  </div>
+</div>
+
+<!-- Bottom Nav -->
+<div class="bottom-nav">
+  <button class="active" data-s="plan"><span class="icon">📅</span>计划</button>
+  <button data-s="words"><span class="icon">📝</span>词汇</button>
+  <button data-s="listen"><span class="icon">🎧</span>听力</button>
+  <button data-s="read"><span class="icon">📖</span>阅读</button>
+  <button data-s="write"><span class="icon">✍️</span>写作</button>
+  <button data-s="trans"><span class="icon">🔄</span>翻译</button>
+  <button data-s="timer"><span class="icon">⏱</span>专注</button>
+  <button data-s="score"><span class="icon">📊</span>成绩</button>
+  <button data-s="exam"><span class="icon">📋</span>考试</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============ DATA ============
+const W=[
+{w:"abandon",p:"/əˈbændən/",m:"v. 放弃；抛弃",ex:"He abandoned his plan to travel abroad."},
+{w:"absorb",p:"/əbˈzɔːrb/",m:"v. 吸收；吸引",ex:"Plants absorb energy from the sun."},
+{w:"abstract",p:"/ˈæbstrækt/",m:"adj. 抽象的 n. 摘要",ex:"The concept of time is abstract."},
+{w:"academic",p:"/ˌækəˈdemɪk/",m:"adj. 学术的；学业的",ex:"She pursued an academic career."},
+{w:"accelerate",p:"/əkˈseləreɪt/",m:"v. 加速；促进",ex:"The car accelerated quickly."},
+{w:"access",p:"/ˈækses/",m:"n. 进入；使用权 v. 访问",ex:"Students have access to the library."},
+{w:"accommodate",p:"/əˈkɒmədeɪt/",m:"v. 容纳；适应",ex:"The hotel can accommodate 200 guests."},
+{w:"accompany",p:"/əˈkʌmpəni/",m:"v. 陪伴；伴随",ex:"She accompanied him to the hospital."},
+{w:"accomplish",p:"/əˈkʌmplɪʃ/",m:"v. 完成；实现",ex:"He accomplished his goal."},
+{w:"accurate",p:"/ˈækjərət/",m:"adj. 准确的；精确的",ex:"The report is accurate and detailed."},
+{w:"accuse",p:"/əˈkjuːz/",m:"v. 指控；指责",ex:"He was accused of theft."},
+{w:"achieve",p:"/əˈtʃiːv/",m:"v. 实现；取得",ex:"She achieved great success."},
+{w:"acknowledge",p:"/əkˈnɒlɪdʒ/",m:"v. 承认；感谢",ex:"He acknowledged his mistake."},
+{w:"acquire",p:"/əˈkwaɪər/",m:"v. 获得；学到",ex:"She acquired a new skill."},
+{w:"adapt",p:"/əˈdæpt/",m:"v. 适应；改编",ex:"You must adapt to the new environment."},
+{w:"adequate",p:"/ˈædɪkwət/",m:"adj. 足够的；适当的",ex:"The supply is adequate for our needs."},
+{w:"adjust",p:"/əˈdʒʌst/",m:"v. 调整；适应",ex:"Please adjust your seat."},
+{w:"adopt",p:"/əˈdɒpt/",m:"v. 采用；收养",ex:"They adopted a new strategy."},
+{w:"advance",p:"/ədˈvɑːns/",m:"v./n. 前进；进步",ex:"Technology continues to advance."},
+{w:"advocate",p:"/ˈædvəkeɪt/",m:"v. 提倡 n. 倡导者",ex:"She advocates for equal rights."},
+{w:"afford",p:"/əˈfɔːrd/",m:"v. 负担得起；提供",ex:"I can't afford a new car."},
+{w:"aggressive",p:"/əˈɡresɪv/",m:"adj. 有进取心的",ex:"He is an aggressive businessman."},
+{w:"allocate",p:"/ˈæləkeɪt/",m:"v. 分配；拨出",ex:"The funds were allocated to education."},
+{w:"alternative",p:"/ɔːlˈtɜːrnətɪv/",m:"n. 替代选择 adj. 可选的",ex:"We need an alternative plan."},
+{w:"ambiguous",p:"/æmˈbɪɡjuəs/",m:"adj. 模棱两可的",ex:"The instructions are ambiguous."},
+{w:"ambitious",p:"/æmˈbɪʃəs/",m:"adj. 有雄心的",ex:"She is an ambitious young woman."},
+{w:"anticipate",p:"/ænˈtɪsɪpeɪt/",m:"v. 预期；期望",ex:"We anticipate a positive result."},
+{w:"apparent",p:"/əˈpærənt/",m:"adj. 明显的；表面的",ex:"The answer is apparent to everyone."},
+{w:"appeal",p:"/əˈpiːl/",m:"v./n. 呼吁；上诉；吸引",ex:"The idea appeals to young people."},
+{w:"appreciate",p:"/əˈpriːʃieɪt/",m:"v. 欣赏；感激",ex:"I appreciate your help."},
+{w:"approach",p:"/əˈprəʊtʃ/",m:"v. 接近 n. 方法",ex:"We need a new approach."},
+{w:"appropriate",p:"/əˈprəʊpriət/",m:"adj. 适当的",ex:"This is not appropriate behavior."},
+{w:"approve",p:"/əˈpruːv/",m:"v. 批准；赞成",ex:"The plan was approved."},
+{w:"arise",p:"/əˈraɪz/",m:"v. 出现；产生",ex:"Problems may arise during the process."},
+{w:"assess",p:"/əˈses/",m:"v. 评估；评定",ex:"We need to assess the situation."},
+{w:"assign",p:"/əˈsaɪn/",m:"v. 分配；指派",ex:"The teacher assigned homework."},
+{w:"associate",p:"/əˈsəʊʃieɪt/",m:"v. 联系 n. 同事",ex:"People associate the color with happiness."},
+{w:"assume",p:"/əˈsjuːm/",m:"v. 假设；承担",ex:"Don't assume anything."},
+{w:"assure",p:"/əˈʃʊər/",m:"v. 保证；使确信",ex:"I assure you everything will be fine."},
+{w:"atmosphere",p:"/ˈætməsfɪər/",m:"n. 大气；气氛",ex:"The restaurant has a cozy atmosphere."},
+{w:"attach",p:"/əˈtætʃ/",m:"v. 附上；依恋",ex:"Please attach your photo to the form."},
+{w:"attempt",p:"/əˈtempt/",m:"v./n. 尝试；企图",ex:"He attempted to climb the mountain."},
+{w:"attitude",p:"/ˈætɪtjuːd/",m:"n. 态度；看法",ex:"She has a positive attitude."},
+{w:"attract",p:"/əˈtrækt/",m:"v. 吸引；引起",ex:"The exhibition attracted many visitors."},
+{w:"authority",p:"/ɔːˈθɒrəti/",m:"n. 权威；当局",ex:"The authority approved the project."},
+{w:"available",p:"/əˈveɪləbl/",m:"adj. 可用的；有空的",ex:"Tickets are available online."},
+{w:"aware",p:"/əˈweər/",m:"adj. 意识到的",ex:"Are you aware of the risks?"},
+{w:"balance",p:"/ˈbæləns/",m:"n. 平衡 v. 使平衡",ex:"You need a balance between work and rest."},
+{w:"barrier",p:"/ˈbæriər/",m:"n. 障碍；屏障",ex:"Language can be a barrier to communication."},
+{w:"benefit",p:"/ˈbenɪfɪt/",m:"n. 利益 v. 有益于",ex:"Exercise benefits your health."},
+{w:"boost",p:"/buːst/",m:"v./n. 促进；提高",ex:"The policy will boost the economy."},
+{w:"boundary",p:"/ˈbaʊndri/",m:"n. 边界；界限",ex:"We need to set clear boundaries."},
+{w:"burden",p:"/ˈbɜːrdn/",m:"n. 负担 v. 使负担",ex:"The tax burden is too heavy."},
+{w:"capable",p:"/ˈkeɪpəbl/",m:"adj. 有能力的",ex:"She is capable of handling the task."},
+{w:"capacity",p:"/kəˈpæsəti/",m:"n. 能力；容量",ex:"The stadium has a capacity of 50,000."},
+{w:"capture",p:"/ˈkæptʃər/",m:"v. 捕获；吸引",ex:"The photo captured the moment perfectly."},
+{w:"category",p:"/ˈkætəɡɔːri/",m:"n. 类别；种类",ex:"Books are arranged by category."},
+{w:"challenge",p:"/ˈtʃælɪndʒ/",m:"n./v. 挑战",ex:"She accepted the challenge."},
+{w:"claim",p:"/kleɪm/",m:"v./n. 声称；索赔",ex:"He claimed to be innocent."},
+{w:"clarify",p:"/ˈklærɪfaɪ/",m:"v. 澄清；阐明",ex:"Could you clarify your point?"},
+{w:"collapse",p:"/kəˈlæps/",m:"v./n. 崩塌；垮台",ex:"The building collapsed during the earthquake."},
+{w:"combine",p:"/kəmˈbaɪn/",m:"v. 结合；联合",ex:"We should combine theory with practice."},
+{w:"commit",p:"/kəˈmɪt/",m:"v. 犯罪；承诺；投入",ex:"She committed herself to the project."},
+{w:"communicate",p:"/kəˈmjuːnɪkeɪt/",m:"v. 交流；传达",ex:"We need to communicate effectively."},
+{w:"compel",p:"/kəmˈpel/",m:"v. 强迫；迫使",ex:"He was compelled to resign."},
+{w:"compete",p:"/kəmˈpiːt/",m:"v. 竞争；比赛",ex:"Companies compete for market share."},
+{w:"complex",p:"/ˈkɒmpleks/",m:"adj. 复杂的",ex:"The issue is more complex than expected."},
+{w:"component",p:"/kəmˈpəʊnənt/",m:"n. 成分；部件",ex:"Trust is a key component of friendship."},
+{w:"concentrate",p:"/ˈkɒnsntreɪt/",m:"v. 集中；专注",ex:"I need to concentrate on my work."},
+{w:"concept",p:"/ˈkɒnsept/",m:"n. 概念；观念",ex:"The concept is hard to understand."},
+{w:"conclude",p:"/kənˈkluːd/",m:"v. 得出结论；结束",ex:"We concluded the meeting at noon."},
+{w:"conduct",p:"/kənˈdʌkt/",m:"v. 进行 n. 行为",ex:"The study was conducted in 2023."},
+{w:"confirm",p:"/kənˈfɜːrm/",m:"v. 确认；证实",ex:"Please confirm your reservation."},
+{w:"conflict",p:"/ˈkɒnflɪkt/",m:"n. 冲突；矛盾",ex:"There is a conflict between the two parties."},
+{w:"consequence",p:"/ˈkɒnsɪkwəns/",m:"n. 结果；后果",ex:"He suffered the consequences."},
+{w:"considerable",p:"/kənˈsɪdərəbl/",m:"adj. 相当大的",ex:"A considerable amount of time was spent."},
+{w:"consist",p:"/kənˈsɪst/",m:"v. 由…组成",ex:"The team consists of five members."},
+{w:"constant",p:"/ˈkɒnstənt/",m:"adj. 持续的；不变的",ex:"The temperature remains constant."},
+{w:"construct",p:"/kənˈstrʌkt/",m:"v. 建造；构建",ex:"They constructed a new bridge."},
+{w:"consume",p:"/kənˈsjuːm/",m:"v. 消费；消耗",ex:"People consume too much sugar."},
+{w:"contribute",p:"/kənˈtrɪbjuːt/",m:"v. 贡献",ex:"Everyone should contribute to society."},
+{w:"controversial",p:"/ˌkɒntrəˈvɜːrʃl/",m:"adj. 有争议的",ex:"The topic is highly controversial."},
+{w:"convenient",p:"/kənˈviːniənt/",m:"adj. 方便的",ex:"The location is very convenient."},
+{w:"convince",p:"/kənˈvɪns/",m:"v. 使确信；说服",ex:"She convinced me to join the team."},
+{w:"cooperate",p:"/kəʊˈɒpəreɪt/",m:"v. 合作；协作",ex:"The two companies agreed to cooperate."},
+{w:"cope",p:"/kəʊp/",m:"v. 应对；处理",ex:"She learned to cope with stress."},
+{w:"crucial",p:"/ˈkruːʃl/",m:"adj. 关键的；决定性的",ex:"This is a crucial moment."},
+{w:"cultivate",p:"/ˈkʌltɪveɪt/",m:"v. 培养；耕种",ex:"We should cultivate good habits."},
+{w:"current",p:"/ˈkʌrənt/",m:"adj. 当前的",ex:"The current situation is improving."},
+{w:"debate",p:"/dɪˈbeɪt/",m:"n./v. 辩论",ex:"The debate lasted for hours."},
+{w:"decline",p:"/dɪˈklaɪn/",m:"v./n. 下降；拒绝",ex:"Sales have declined this year."},
+{w:"decrease",p:"/dɪˈkriːs/",m:"v./n. 减少",ex:"The number of accidents has decreased."},
+{w:"define",p:"/dɪˈfaɪn/",m:"v. 定义；限定",ex:"How do you define success?"},
+{w:"deliberate",p:"/dɪˈlɪbərət/",m:"adj. 故意的；慎重的",ex:"It was a deliberate decision."},
+{w:"demand",p:"/dɪˈmɑːnd/",m:"n./v. 要求；需求",ex:"The demand for clean water is increasing."},
+{w:"demonstrate",p:"/ˈdemənstreɪt/",m:"v. 证明；演示",ex:"The experiment demonstrates the theory."},
+{w:"deny",p:"/dɪˈnaɪ/",m:"v. 否认；拒绝",ex:"He denied the accusation."},
+{w:"depend",p:"/dɪˈpend/",m:"v. 依赖；取决于",ex:"Success depends on hard work."},
+{w:"derive",p:"/dɪˈraɪv/",m:"v. 源于；获得",ex:"The word derives from Latin."},
+{w:"deserve",p:"/dɪˈzɜːrv/",m:"v. 值得；应得",ex:"She deserves a promotion."},
+{w:"despite",p:"/dɪˈspaɪt/",m:"prep. 尽管",ex:"Despite the rain, we went out."},
+{w:"detect",p:"/dɪˈtekt/",m:"v. 发现；察觉",ex:"The sensor can detect changes."},
+{w:"determine",p:"/dɪˈtɜːrmɪn/",m:"v. 决定；确定",ex:"Your attitude determines your success."},
+{w:"devote",p:"/dɪˈvəʊt/",m:"v. 献身于；致力于",ex:"She devoted her life to science."},
+{w:"dilemma",p:"/dɪˈlemə/",m:"n. 困境",ex:"He faced a moral dilemma."},
+{w:"diminish",p:"/dɪˈmɪnɪʃ/",m:"v. 减少；缩小",ex:"His influence has diminished."},
+{w:"discipline",p:"/ˈdɪsɪplɪn/",m:"n. 纪律；学科",ex:"Self-discipline is essential for success."},
+{w:"discriminate",p:"/dɪˈskrɪmɪneɪt/",m:"v. 歧视；区分",ex:"We should not discriminate against others."},
+{w:"dismiss",p:"/dɪˈsmɪs/",m:"v. 解雇；驳回",ex:"The judge dismissed the case."},
+{w:"display",p:"/dɪˈspleɪ/",m:"v./n. 展示",ex:"The museum displays ancient artifacts."},
+{w:"distinct",p:"/dɪˈstɪŋkt/",m:"adj. 明显的；不同的",ex:"There are two distinct approaches."},
+{w:"distinguish",p:"/dɪˈstɪŋɡwɪʃ/",m:"v. 区分；辨别",ex:"Can you distinguish between the two?"},
+{w:"distribute",p:"/dɪˈstrɪbjuːt/",m:"v. 分配；分发",ex:"Food was distributed to the victims."},
+{w:"diverse",p:"/daɪˈvɜːrs/",m:"adj. 多样的",ex:"The city has a diverse population."},
+{w:"domestic",p:"/dəˈmestɪk/",m:"adj. 国内的；家庭的",ex:"Domestic flights are cheaper."},
+{w:"dominate",p:"/ˈdɒmɪneɪt/",m:"v. 支配；占主导",ex:"The company dominates the market."},
+{w:"dramatic",p:"/drəˈmætɪk/",m:"adj. 戏剧性的；显著的",ex:"There has been a dramatic change."},
+{w:"economic",p:"/ˌiːkəˈnɒmɪk/",m:"adj. 经济的",ex:"Economic growth is essential."},
+{w:"efficient",p:"/ɪˈfɪʃnt/",m:"adj. 高效的",ex:"We need a more efficient system."},
+{w:"elaborate",p:"/ɪˈlæbərət/",m:"adj. 精心的 v. 详述",ex:"Could you elaborate on that point?"},
+{w:"eliminate",p:"/ɪˈlɪmɪneɪt/",m:"v. 消除；淘汰",ex:"We must eliminate waste."},
+{w:"embrace",p:"/ɪmˈbreɪs/",m:"v. 拥抱；接受",ex:"We should embrace new technology."},
+{w:"emerge",p:"/ɪˈmɜːrdʒ/",m:"v. 出现；浮现",ex:"New problems have emerged."},
+{w:"emphasis",p:"/ˈemfəsɪs/",m:"n. 强调；重点",ex:"The emphasis is on quality."},
+{w:"enable",p:"/ɪˈneɪbl/",m:"v. 使能够",ex:"Technology enables us to work remotely."},
+{w:"encounter",p:"/ɪnˈkaʊntər/",m:"v./n. 遇到",ex:"We encountered many difficulties."},
+{w:"encourage",p:"/ɪnˈkʌrɪdʒ/",m:"v. 鼓励；促进",ex:"Teachers should encourage students."},
+{w:"endure",p:"/ɪnˈdjʊər/",m:"v. 忍受；持久",ex:"She endured great hardship."},
+{w:"engage",p:"/ɪnˈɡeɪdʒ/",m:"v. 从事；吸引",ex:"She is engaged in research."},
+{w:"enhance",p:"/ɪnˈhɑːns/",m:"v. 提高；增强",ex:"Exercise enhances mental health."},
+{w:"enormous",p:"/ɪˈnɔːrməs/",m:"adj. 巨大的",ex:"The project requires enormous effort."},
+{w:"ensure",p:"/ɪnˈʃʊər/",m:"v. 确保",ex:"Please ensure all doors are locked."},
+{w:"entire",p:"/ɪnˈtaɪər/",m:"adj. 整个的",ex:"He spent the entire day studying."},
+{w:"environment",p:"/ɪnˈvaɪrənmənt/",m:"n. 环境",ex:"We must protect the environment."},
+{w:"equip",p:"/ɪˈkwɪp/",m:"v. 装备；使有能力",ex:"Education equips you for the future."},
+{w:"equivalent",p:"/ɪˈkwɪvələnt/",m:"adj. 等同的",ex:"One mile is equivalent to 1.6 km."},
+{w:"essential",p:"/ɪˈsenʃl/",m:"adj. 必要的",ex:"Water is essential for life."},
+{w:"establish",p:"/ɪˈstæblɪʃ/",m:"v. 建立；确立",ex:"The company was established in 1990."},
+{w:"estimate",p:"/ˈestɪmeɪt/",m:"v./n. 估计",ex:"We estimate the cost at $5000."},
+{w:"evaluate",p:"/ɪˈvæljueɪt/",m:"v. 评估",ex:"We need to evaluate the results."},
+{w:"evidence",p:"/ˈevɪdəns/",m:"n. 证据",ex:"There is no evidence to support the claim."},
+{w:"evolve",p:"/ɪˈvɒlv/",m:"v. 进化；发展",ex:"Technology has evolved rapidly."},
+{w:"exceed",p:"/ɪkˈsiːd/",m:"v. 超过",ex:"Sales exceeded expectations."},
+{w:"exclude",p:"/ɪkˈskluːd/",m:"v. 排除",ex:"The price excludes tax."},
+{w:"exert",p:"/ɪɡˈzɜːrt/",m:"v. 施加；运用",ex:"He exerted great influence."},
+{w:"expand",p:"/ɪkˈspænd/",m:"v. 扩展",ex:"The company plans to expand overseas."},
+{w:"exploit",p:"/ɪkˈsplɔɪt/",m:"v. 利用；开发",ex:"We should exploit renewable energy."},
+{w:"explore",p:"/ɪkˈsplɔːr/",m:"v. 探索",ex:"Scientists explore the deep ocean."},
+{w:"expose",p:"/ɪkˈspəʊz/",m:"v. 暴露；揭露",ex:"The report exposed the scandal."},
+{w:"extend",p:"/ɪkˈstend/",m:"v. 延伸；扩展",ex:"We extended the deadline."},
+{w:"extent",p:"/ɪkˈstent/",m:"n. 程度；范围",ex:"To what extent do you agree?"},
+{w:"extraordinary",p:"/ɪkˈstrɔːrdneri/",m:"adj. 非凡的",ex:"She has extraordinary talent."},
+{w:"facility",p:"/fəˈsɪləti/",m:"n. 设施",ex:"The campus has excellent facilities."},
+{w:"factor",p:"/ˈfæktər/",m:"n. 因素",ex:"Cost is an important factor."},
+{w:"feature",p:"/ˈfiːtʃər/",m:"n. 特征 v. 以…为特色",ex:"The phone has many new features."},
+{w:"flexible",p:"/ˈfleksəbl/",m:"adj. 灵活的",ex:"We need a more flexible schedule."},
+{w:"focus",p:"/ˈfəʊkəs/",m:"v./n. 集中；焦点",ex:"Focus on your goals."},
+{w:"forecast",p:"/ˈfɔːrkɑːst/",m:"v./n. 预测",ex:"The forecast predicts rain tomorrow."},
+{w:"foundation",p:"/faʊnˈdeɪʃn/",m:"n. 基础",ex:"Education is the foundation of success."},
+{w:"fundamental",p:"/ˌfʌndəˈmentl/",m:"adj. 基本的",ex:"Freedom is a fundamental right."},
+{w:"generate",p:"/ˈdʒenəreɪt/",m:"v. 产生",ex:"The project generates income."},
+{w:"genuine",p:"/ˈdʒenjuɪn/",m:"adj. 真正的；真诚的",ex:"She showed genuine concern."},
+{w:"global",p:"/ˈɡləʊbl/",m:"adj. 全球的",ex:"Global warming is a serious issue."},
+{w:"grasp",p:"/ɡrɑːsp/",m:"v./n. 抓住；理解",ex:"He grasped the concept quickly."},
+{w:"guarantee",p:"/ˌɡærənˈtiː/",m:"v./n. 保证",ex:"Hard work guarantees success."},
+{w:"highlight",p:"/ˈhaɪlaɪt/",m:"v. 强调 n. 亮点",ex:"The report highlights the key issues."},
+{w:"identical",p:"/aɪˈdentɪkl/",m:"adj. 完全相同的",ex:"The two copies are identical."},
+{w:"identify",p:"/aɪˈdentɪfaɪ/",m:"v. 识别；确认",ex:"Can you identify the problem?"},
+{w:"illustrate",p:"/ˈɪləstreɪt/",m:"v. 说明",ex:"The example illustrates the point."},
+{w:"impact",p:"/ˈɪmpækt/",m:"n./v. 影响",ex:"Technology has a huge impact on our lives."},
+{w:"implement",p:"/ˈɪmplɪment/",m:"v. 实施",ex:"We will implement the new policy."},
+{w:"imply",p:"/ɪmˈplaɪ/",m:"v. 暗示",ex:"His silence implied agreement."},
+{w:"impose",p:"/ɪmˈpəʊz/",m:"v. 强加；征收",ex:"The government imposed new taxes."},
+{w:"incline",p:"/ɪnˈklaɪn/",m:"v. 倾向于",ex:"I am inclined to agree."},
+{w:"indicate",p:"/ˈɪndɪkeɪt/",m:"v. 表明",ex:"The results indicate success."},
+{w:"individual",p:"/ˌɪndɪˈvɪdʒuəl/",m:"n. 个人 adj. 单独的",ex:"Each individual has unique talents."},
+{w:"inevitable",p:"/ɪnˈevɪtəbl/",m:"adj. 不可避免的",ex:"Change is inevitable."},
+{w:"influence",p:"/ˈɪnfluəns/",m:"n./v. 影响",ex:"Parents influence their children greatly."},
+{w:"initial",p:"/ɪˈnɪʃl/",m:"adj. 最初的",ex:"The initial results are promising."},
+{w:"initiative",p:"/ɪˈnɪʃətɪv/",m:"n. 主动性；倡议",ex:"She took the initiative to help."},
+{w:"innovate",p:"/ˈɪnəveɪt/",m:"v. 创新",ex:"Companies must innovate to survive."},
+{w:"inspire",p:"/ɪnˈspaɪər/",m:"v. 激发；鼓舞",ex:"Her story inspired many people."},
+{w:"instance",p:"/ˈɪnstəns/",m:"n. 例子",ex:"For instance, consider this case."},
+{w:"integrate",p:"/ˈɪntɪɡreɪt/",m:"v. 整合；融入",ex:"We need to integrate technology into education."},
+{w:"intend",p:"/ɪnˈtend/",m:"v. 打算",ex:"I intend to finish the project today."},
+{w:"intense",p:"/ɪnˈtens/",m:"adj. 强烈的",ex:"The competition is intense."},
+{w:"interact",p:"/ˌɪntərˈækt/",m:"v. 互动",ex:"Children learn by interacting with others."},
+{w:"interpret",p:"/ɪnˈtɜːrprɪt/",m:"v. 解释；口译",ex:"How do you interpret this data?"},
+{w:"investigate",p:"/ɪnˈvestɪɡeɪt/",m:"v. 调查",ex:"Police are investigating the case."},
+{w:"involve",p:"/ɪnˈvɒlv/",m:"v. 涉及；包含",ex:"The project involves many people."},
+{w:"justify",p:"/ˈdʒʌstɪfaɪ/",m:"v. 证明…正当",ex:"Can you justify your decision?"},
+{w:"launch",p:"/lɔːntʃ/",m:"v./n. 发动；推出",ex:"The company launched a new product."},
+{w:"maintain",p:"/meɪnˈteɪn/",m:"v. 维持",ex:"We must maintain high standards."},
+{w:"majority",p:"/məˈdʒɒrəti/",m:"n. 多数",ex:"The majority voted in favor."},
+{w:"manage",p:"/ˈmænɪdʒ/",m:"v. 管理；设法",ex:"She manages a team of 20 people."},
+{w:"manufacture",p:"/ˌmænjuˈfæktʃər/",m:"v./n. 制造",ex:"The product is manufactured in China."},
+{w:"mature",p:"/məˈtʃʊər/",m:"adj. 成熟的",ex:"He is mature for his age."},
+{w:"mechanism",p:"/ˈmekənɪzəm/",m:"n. 机制",ex:"The mechanism is complex."},
+{w:"mental",p:"/ˈmentl/",m:"adj. 精神的",ex:"Mental health is as important as physical health."},
+{w:"method",p:"/ˈmeθəd/",m:"n. 方法",ex:"We need a better method."},
+{w:"military",p:"/ˈmɪlɪtəri/",m:"adj. 军事的",ex:"He served in the military."},
+{w:"minimize",p:"/ˈmɪnɪmaɪz/",m:"v. 最小化",ex:"We should minimize risks."},
+{w:"modify",p:"/ˈmɒdɪfaɪ/",m:"v. 修改",ex:"We modified the plan slightly."},
+{w:"monitor",p:"/ˈmɒnɪtər/",m:"v./n. 监控",ex:"Doctors monitor the patient's condition."},
+{w:"motivate",p:"/ˈməʊtɪveɪt/",m:"v. 激励",ex:"What motivates you to study?"},
+{w:"negotiate",p:"/nɪˈɡəʊʃieɪt/",m:"v. 谈判",ex:"They negotiated a deal."},
+{w:"nevertheless",p:"/ˌnevəðəˈles/",m:"adv. 然而",ex:"It was raining; nevertheless, we went out."},
+{w:"notion",p:"/ˈnəʊʃn/",m:"n. 概念；想法",ex:"The notion of fairness is important."},
+{w:"numerous",p:"/ˈnjuːmərəs/",m:"adj. 许多的",ex:"Numerous studies confirm this."},
+{w:"objective",p:"/əbˈdʒektɪv/",m:"n. 目标 adj. 客观的",ex:"Our objective is to improve quality."},
+{w:"obligation",p:"/ˌɒblɪˈɡeɪʃn/",m:"n. 义务",ex:"You have an obligation to help."},
+{w:"obtain",p:"/əbˈteɪn/",m:"v. 获得",ex:"She obtained a degree in law."},
+{w:"obvious",p:"/ˈɒbviəs/",m:"adj. 明显的",ex:"The answer is obvious."},
+{w:"occupy",p:"/ˈɒkjupaɪ/",m:"v. 占据",ex:"The meeting occupied the whole morning."},
+{w:"occur",p:"/əˈkɜːr/",m:"v. 发生",ex:"Accidents occur frequently."},
+{w:"operate",p:"/ˈɒpəreɪt/",m:"v. 操作；经营",ex:"The machine operates automatically."},
+{w:"opportunity",p:"/ˌɒpəˈtjuːnəti/",m:"n. 机会",ex:"This is a great opportunity."},
+{w:"oppose",p:"/əˈpəʊz/",m:"v. 反对",ex:"Many people opposed the plan."},
+{w:"optimistic",p:"/ˌɒptɪˈmɪstɪk/",m:"adj. 乐观的",ex:"She is optimistic about the future."},
+{w:"outcome",p:"/ˈaʊtkʌm/",m:"n. 结果",ex:"The outcome was unexpected."},
+{w:"outstanding",p:"/aʊtˈstændɪŋ/",m:"adj. 杰出的",ex:"She is an outstanding student."},
+{w:"overcome",p:"/ˌəʊvərˈkʌm/",m:"v. 克服",ex:"She overcame many obstacles."},
+{w:"overlook",p:"/ˌəʊvərˈlʊk/",m:"v. 忽视",ex:"Don't overlook the details."},
+{w:"participate",p:"/pɑːˈtɪsɪpeɪt/",m:"v. 参加",ex:"All students should participate."},
+{w:"perceive",p:"/pəˈsiːv/",m:"v. 感知",ex:"People perceive the situation differently."},
+{w:"permanent",p:"/ˈpɜːrmənənt/",m:"adj. 永久的",ex:"This is a permanent solution."},
+{w:"persist",p:"/pəˈsɪst/",m:"v. 坚持",ex:"She persisted despite difficulties."},
+{w:"perspective",p:"/pəˈspektɪv/",m:"n. 观点；视角",ex:"Try to see it from a different perspective."},
+{w:"phenomenon",p:"/fɪˈnɒmɪnən/",m:"n. 现象",ex:"Globalization is a modern phenomenon."},
+{w:"policy",p:"/ˈpɒləsi/",m:"n. 政策",ex:"The company has a strict policy."},
+{w:"positive",p:"/ˈpɒzətɪv/",m:"adj. 积极的",ex:"She has a positive attitude."},
+{w:"potential",p:"/pəˈtenʃl/",m:"adj. 潜在的 n. 潜力",ex:"Every student has potential."},
+{w:"predict",p:"/prɪˈdɪkt/",m:"v. 预测",ex:"Experts predict economic growth."},
+{w:"preserve",p:"/prɪˈzɜːrv/",m:"v. 保护；保存",ex:"We must preserve our cultural heritage."},
+{w:"primary",p:"/ˈpraɪməri/",m:"adj. 主要的",ex:"Education is the primary concern."},
+{w:"principle",p:"/ˈprɪnsɪpl/",m:"n. 原则",ex:"He acts on principle."},
+{w:"priority",p:"/praɪˈɒrəti/",m:"n. 优先事项",ex:"Safety is our top priority."},
+{w:"prohibit",p:"/prəˈhɪbɪt/",m:"v. 禁止",ex:"The law prohibits discrimination."},
+{w:"promote",p:"/prəˈməʊt/",m:"v. 促进；提升",ex:"Exercise promotes good health."},
+{w:"prompt",p:"/prɒmpt/",m:"adj. 迅速的 v. 促使",ex:"The issue prompted a discussion."},
+{w:"prospect",p:"/ˈprɒspekt/",m:"n. 前景",ex:"The job prospects are good."},
+{w:"pursue",p:"/pəˈsjuː/",m:"v. 追求",ex:"She pursues her dreams."},
+{w:"radical",p:"/ˈrædɪkl/",m:"adj. 根本的；激进的",ex:"Radical changes are needed."},
+{w:"range",p:"/reɪndʒ/",m:"n. 范围",ex:"A wide range of options is available."},
+{w:"rational",p:"/ˈræʃnəl/",m:"adj. 理性的",ex:"We need a rational approach."},
+{w:"react",p:"/riˈækt/",m:"v. 反应",ex:"How did she react to the news?"},
+{w:"recover",p:"/rɪˈkʌvər/",m:"v. 恢复",ex:"The economy recovered slowly."},
+{w:"reduce",p:"/rɪˈdjuːs/",m:"v. 减少",ex:"We need to reduce costs."},
+{w:"reflect",p:"/rɪˈflekt/",m:"v. 反映；反思",ex:"The data reflects the trend."},
+{w:"reform",p:"/rɪˈfɔːrm/",m:"v./n. 改革",ex:"The education system needs reform."},
+{w:"regulate",p:"/ˈreɡjuleɪt/",m:"v. 管理；调节",ex:"Laws regulate human behavior."},
+{w:"reinforce",p:"/ˌriːɪnˈfɔːrs/",m:"v. 加强",ex:"Practice reinforces learning."},
+{w:"reject",p:"/rɪˈdʒekt/",m:"v. 拒绝",ex:"The proposal was rejected."},
+{w:"relevant",p:"/ˈreləvənt/",m:"adj. 相关的",ex:"Please provide relevant information."},
+{w:"reliable",p:"/rɪˈlaɪəbl/",m:"adj. 可靠的",ex:"She is a reliable colleague."},
+{w:"reluctant",p:"/rɪˈlʌktənt/",m:"adj. 不情愿的",ex:"He was reluctant to leave."},
+{w:"rely",p:"/rɪˈlaɪ/",m:"v. 依赖",ex:"You can rely on me."},
+{w:"remark",p:"/rɪˈmɑːrk/",m:"n./v. 评论",ex:"He made a witty remark."},
+{w:"require",p:"/rɪˈkwaɪər/",m:"v. 需要；要求",ex:"The job requires experience."},
+{w:"resemble",p:"/rɪˈzembl/",m:"v. 像",ex:"She resembles her mother."},
+{w:"resist",p:"/rɪˈzɪst/",m:"v. 抵制",ex:"She couldn't resist the temptation."},
+{w:"resolve",p:"/rɪˈzɒlv/",m:"v. 解决",ex:"We must resolve the conflict."},
+{w:"resource",p:"/rɪˈsɔːrs/",m:"n. 资源",ex:"Natural resources are limited."},
+{w:"respond",p:"/rɪˈspɒnd/",m:"v. 回应",ex:"She responded quickly."},
+{w:"restore",p:"/rɪˈstɔːr/",m:"v. 恢复；修复",ex:"They restored the old building."},
+{w:"restrict",p:"/rɪˈstrɪkt/",m:"v. 限制",ex:"Access is restricted."},
+{w:"retain",p:"/rɪˈteɪn/",m:"v. 保持",ex:"She retained her title."},
+{w:"reveal",p:"/rɪˈviːl/",m:"v. 揭示",ex:"The study revealed surprising results."},
+{w:"revenue",p:"/ˈrevənjuː/",m:"n. 收入",ex:"Government revenue increased."},
+{w:"revolution",p:"/ˌrevəˈluːʃn/",m:"n. 革命",ex:"The digital revolution changed everything."},
+{w:"rigid",p:"/ˈrɪdʒɪd/",m:"adj. 严格的",ex:"The rules are too rigid."},
+{w:"sacrifice",p:"/ˈsækrɪfaɪs/",m:"v./n. 牺牲",ex:"She sacrificed her career for her family."},
+{w:"secure",p:"/sɪˈkjʊər/",m:"adj. 安全的 v. 获得",ex:"The building is secure."},
+{w:"seek",p:"/siːk/",m:"v. 寻找",ex:"She sought advice from experts."},
+{w:"select",p:"/sɪˈlekt/",m:"v. 选择",ex:"Please select your preferred option."},
+{w:"sensitive",p:"/ˈsensətɪv/",m:"adj. 敏感的",ex:"This is a sensitive topic."},
+{w:"severe",p:"/sɪˈvɪər/",m:"adj. 严重的",ex:"The storm caused severe damage."},
+{w:"shift",p:"/ʃɪft/",m:"v./n. 转变",ex:"There has been a shift in attitude."},
+{w:"significant",p:"/sɪɡˈnɪfɪkənt/",m:"adj. 重要的",ex:"This is a significant achievement."},
+{w:"sophisticated",p:"/səˈfɪstɪkeɪtɪd/",m:"adj. 复杂的；精密的",ex:"The technology is very sophisticated."},
+{w:"specific",p:"/spəˈsɪfɪk/",m:"adj. 具体的",ex:"Can you be more specific?"},
+{w:"stable",p:"/ˈsteɪbl/",m:"adj. 稳定的",ex:"The economy is stable."},
+{w:"stimulate",p:"/ˈstɪmjuleɪt/",m:"v. 刺激；激发",ex:"The policy stimulates growth."},
+{w:"strategy",p:"/ˈstrætədʒi/",m:"n. 策略",ex:"We need a new strategy."},
+{w:"strengthen",p:"/ˈstreŋθn/",m:"v. 加强",ex:"We must strengthen our defenses."},
+{w:"stress",p:"/stres/",m:"n. 压力 v. 强调",ex:"She is under a lot of stress."},
+{w:"submit",p:"/səbˈmɪt/",m:"v. 提交",ex:"Please submit your application."},
+{w:"sufficient",p:"/səˈfɪʃnt/",m:"adj. 足够的",ex:"We have sufficient evidence."},
+{w:"summarize",p:"/ˈsʌməraɪz/",m:"v. 总结",ex:"Please summarize the main points."},
+{w:"superior",p:"/suːˈpɪəriər/",m:"adj. 优越的",ex:"This product is superior in quality."},
+{w:"survey",p:"/ˈsɜːrveɪ/",m:"n./v. 调查",ex:"The survey shows interesting results."},
+{w:"survive",p:"/səˈvaɪv/",m:"v. 幸存",ex:"Only a few survived the disaster."},
+{w:"suspect",p:"/səˈspekt/",m:"v. 怀疑",ex:"I suspect he is not telling the truth."},
+{w:"sustain",p:"/səˈsteɪn/",m:"v. 维持",ex:"We cannot sustain this pace."},
+{w:"target",p:"/ˈtɑːrɡɪt/",m:"n. 目标 v. 瞄准",ex:"We reached our target."},
+{w:"technique",p:"/tekˈniːk/",m:"n. 技术；技巧",ex:"She mastered the technique."},
+{w:"temporary",p:"/ˈtempərəri/",m:"adj. 暂时的",ex:"This is a temporary solution."},
+{w:"tendency",p:"/ˈtendənsi/",m:"n. 趋势",ex:"There is a tendency to overwork."},
+{w:"theme",p:"/θiːm/",m:"n. 主题",ex:"The theme of the conference is innovation."},
+{w:"theory",p:"/ˈθɪəri/",m:"n. 理论",ex:"The theory is widely accepted."},
+{w:"threat",p:"/θret/",m:"n. 威胁",ex:"Climate change is a serious threat."},
+{w:"tolerance",p:"/ˈtɒlərəns/",m:"n. 容忍",ex:"We should show tolerance toward others."},
+{w:"tradition",p:"/trəˈdɪʃn/",m:"n. 传统",ex:"It is a family tradition."},
+{w:"transform",p:"/trænsˈfɔːrm/",m:"v. 转变",ex:"Technology has transformed our lives."},
+{w:"trend",p:"/trend/",m:"n. 趋势",ex:"There is a growing trend toward remote work."},
+{w:"trigger",p:"/ˈtrɪɡər/",m:"v. 触发",ex:"The event triggered a debate."},
+{w:"ultimate",p:"/ˈʌltɪmət/",m:"adj. 最终的",ex:"The ultimate goal is peace."},
+{w:"undergo",p:"/ˌʌndərˈɡəʊ/",m:"v. 经历",ex:"The system underwent major changes."},
+{w:"undertake",p:"/ˌʌndərˈteɪk/",m:"v. 承担",ex:"She undertook the project."},
+{w:"unique",p:"/juˈniːk/",m:"adj. 独特的",ex:"Every person is unique."},
+{w:"universal",p:"/ˌjuːnɪˈvɜːrsl/",m:"adj. 普遍的",ex:"Education is a universal right."},
+{w:"urban",p:"/ˈɜːrbən/",m:"adj. 城市的",ex:"Urban areas have more job opportunities."},
+{w:"urge",p:"/ɜːrdʒ/",m:"v. 催促",ex:"He urged caution."},
+{w:"utilize",p:"/ˈjuːtɪlaɪz/",m:"v. 利用",ex:"We should utilize available resources."},
+{w:"valid",p:"/ˈvælɪd/",m:"adj. 有效的",ex:"Your argument is valid."},
+{w:"vary",p:"/ˈveəri/",m:"v. 变化",ex:"Prices vary by region."},
+{w:"vast",p:"/vɑːst/",m:"adj. 巨大的",ex:"The country has vast resources."},
+{w:"vehicle",p:"/ˈviːɪkl/",m:"n. 车辆",ex:"Cars are the most common vehicle."},
+{w:"venture",p:"/ˈventʃər/",m:"n. 冒险事业",ex:"He started a new venture."},
+{w:"version",p:"/ˈvɜːrʒn/",m:"n. 版本",ex:"This is the latest version."},
+{w:"victim",p:"/ˈvɪktɪm/",m:"n. 受害者",ex:"The victims received assistance."},
+{w:"virtual",p:"/ˈvɜːrtʃuəl/",m:"adj. 虚拟的",ex:"Virtual meetings are now common."},
+{w:"visible",p:"/ˈvɪzəbl/",m:"adj. 看得见的",ex:"The results are visible."},
+{w:"vital",p:"/ˈvaɪtl/",m:"adj. 至关重要的",ex:"Sleep is vital for health."},
+{w:"vivid",p:"/ˈvɪvɪd/",m:"adj. 生动的",ex:"She gave a vivid description."},
+{w:"voluntary",p:"/ˈvɒləntri/",m:"adj. 自愿的",ex:"The work is voluntary."},
+{w:"welfare",p:"/ˈwelfeər/",m:"n. 福利",ex:"The government provides welfare services."},
+{w:"widespread",p:"/ˈwaɪdspred/",m:"adj. 广泛的",ex:"There is widespread support for the plan."},
+{w:"withdraw",p:"/wɪðˈdrɔː/",m:"v. 撤回",ex:"He withdrew from the competition."},
+{w:"yield",p:"/jiːld/",m:"v. 产出；屈服",ex:"The farm yields high crops."}
+];
+
+const DAYS=[
+{d:1,tasks:[
+  {t:"w",x:"背诵高频词汇 Unit 1-2（60词）"},
+  {t:"l",x:"精听2023年12月真题听力（短篇新闻）"},
+  {t:"r",x:"仔细阅读真题练习 2篇"},
+  {t:"wr",x:"背诵写作万能模板"},
+]},
+{d:2,tasks:[
+  {t:"w",x:"背诵高频词汇 Unit 3-4（60词）+ 复习昨天"},
+  {t:"l",x:"精听2023年12月真题听力（长对话）"},
+  {t:"r",x:"长篇阅读（匹配）练习 1套"},
+  {t:"t",x:"翻译练习 1篇（传统文化话题）"},
+]},
+{d:3,tasks:[
+  {t:"w",x:"背诵高频词汇 Unit 5-6（60词）+ 复习"},
+  {t:"l",x:"精听2023年6月真题听力（新闻+长对话）"},
+  {t:"r",x:"仔细阅读 2篇 + 选词填空 1篇"},
+  {t:"wr",x:"限时30分钟写一篇作文"},
+]},
+{d:4,tasks:[
+  {t:"w",x:"背诵高频词汇 Unit 7-8（60词）+ 复习"},
+  {t:"l",x:"精听2023年6月真题听力（篇章）"},
+  {t:"r",x:"仔细阅读 + 长篇阅读各1套"},
+  {t:"t",x:"翻译练习 1篇（经济发展话题）"},
+]},
+{d:5,tasks:[
+  {t:"w",x:"背诵高频词汇 Unit 9-10 + 全面复习"},
+  {t:"l",x:"完整做一套听力真题（模拟）"},
+  {t:"r",x:"完整做一套阅读真题（模拟）"},
+  {t:"wr",x:"背诵高分句型 + 写一篇作文"},
+]},
+{d:6,tasks:[
+  {t:"m",x:"🔥 第一次全真模考（完整125分钟）"},
+  {t:"w",x:"整理模考中的生词"},
+  {t:"l",x:"精听模考听力错题"},
+]},
+{d:7,tasks:[
+  {t:"w",x:"复习所有标记的生词"},
+  {t:"l",x:"精听2022年12月真题听力"},
+  {t:"r",x:"仔细阅读专项突破 4篇"},
+  {t:"t",x:"翻译练习 2篇（科技+教育话题）"},
+]},
+{d:8,tasks:[
+  {t:"w",x:"词汇查漏补缺 + 易混词辨析"},
+  {t:"l",x:"精听2022年6月真题听力"},
+  {t:"r",x:"长篇阅读 + 选词填空各1套"},
+  {t:"wr",x:"限时写作练习 + 对照范文修改"},
+]},
+{d:9,tasks:[
+  {t:"m",x:"🔥 第二次全真模考"},
+  {t:"w",x:"整理模考生词 + 复习"},
+  {t:"l",x:"精听模考听力，分析错因"},
+]},
+{d:10,tasks:[
+  {t:"l",x:"听力薄弱题型集中突破"},
+  {t:"r",x:"阅读薄弱题型集中突破"},
+  {t:"wr",x:"背诵2篇范文 + 练习1篇"},
+  {t:"t",x:"翻译练习 2篇（综合话题）"},
+]},
+{d:11,tasks:[
+  {t:"m",x:"🔥 第三次全真模考（最后一次）"},
+  {t:"w",x:"最终词汇复习"},
+  {t:"l",x:"听力错题回顾"},
+]},
+{d:12,tasks:[
+  {t:"w",x:"轻松复习高频词，不刷新题"},
+  {t:"wr",x:"过一遍写作模板和高分句型"},
+  {t:"l",x:"听一套真题保持耳朵状态"},
+  {t:"t",x:"看一遍翻译高频词汇"},
+  {t:"m",x:"📋 准备考试用品，早睡早起！"},
+]},
+];
+
+const TAG_MAP={w:"词汇",l:"听力",r:"阅读",wr:"写作",t:"翻译",m:"模考"};
+const TAG_CLS={w:"tag-w",l:"tag-l",r:"tag-r",wr:"tag-wr",t:"tag-t",m:"tag-m"};
+
+const READS=[
+{pass:`The concept of "growth mindset" has gained significant attention in educational psychology over the past decade. Developed by psychologist Carol Dweck, the theory suggests that students who believe their abilities can be developed through hard work and dedication tend to achieve more than those who view their intelligence as a fixed trait.
+
+Research has shown that students with a growth mindset are more likely to embrace challenges, persist through difficulties, and learn from criticism. They see effort as a path to mastery rather than a sign of weakness. In contrast, students with a fixed mindset may avoid challenges, give up easily, and feel threatened by the success of others.
+
+A recent study conducted across 10,000 students in the United States found that a brief intervention teaching growth mindset principles led to measurable improvements in academic performance, particularly among students from disadvantaged backgrounds.
+
+However, critics argue that the growth mindset concept has been oversimplified in popular discourse. They point out that structural factors such as poverty, inadequate resources, and systemic inequality also play crucial roles in academic outcomes.`,
+qs:[
+{q:"What do students with a growth mindset believe?",o:["A. Intelligence is fixed","B. Abilities can be developed through effort","C. Challenges should be avoided","D. Success depends on talent"],a:1,e:"第一段：believe their abilities can be developed through hard work and dedication。"},
+{q:"What did the study across 10,000 students find?",o:["A. No measurable effect","B. Only worked for gifted students","C. Brief growth mindset teaching improved performance","D. Structural factors override mindset"],a:2,e:"第三段：a brief intervention...led to measurable improvements。"},
+{q:"What is the critics' main concern?",o:["A. It is scientifically incorrect","B. It has been oversimplified and ignores structural factors","C. It only works for wealthy students","D. It encourages avoiding challenges"],a:1,e:"最后一段：oversimplified...structural factors also play crucial roles。"}
+]},
+{pass:`Remote work, once considered a rare privilege, has become a standard practice for millions of workers worldwide. The COVID-19 pandemic accelerated this shift, forcing companies to adopt remote work policies almost overnight.
+
+Proponents argue that remote work offers numerous benefits: reduced commuting time, lower overhead costs, and improved work-life balance. A Stanford survey found that remote workers were 13% more productive than their in-office counterparts.
+
+On the other hand, opponents highlight challenges: social isolation, difficulty separating work from personal life, and reduced collaboration. Managers face difficulties in monitoring performance and maintaining team cohesion.
+
+Many organizations are now exploring hybrid models combining remote and in-office work. Early evidence suggests hybrid models may offer the best of both worlds.`,
+qs:[
+{q:"What did the COVID-19 pandemic do to remote work?",o:["A. Had no impact","B. Slowed adoption","C. Accelerated the shift","D. Made it illegal"],a:2,e:"第一段：The COVID-19 pandemic accelerated this shift。"},
+{q:"According to Stanford, remote workers were ___ than in-office workers.",o:["A. less productive","B. 13% more productive","C. equally productive","D. 30% more productive"],a:1,e:"第二段：13% more productive than their in-office counterparts。"},
+{q:"What solution are many organizations exploring?",o:["A. All return to office","B. All work from home","C. Hybrid models","D. Reduced hours"],a:2,e:"最后一段：exploring hybrid models combining remote and in-office work。"}
+]},
+{pass:`Artificial intelligence (AI) is transforming healthcare at an unprecedented pace. From diagnosing diseases to developing new drugs, AI applications are revolutionizing how medical professionals deliver care.
+
+AI algorithms can now detect certain cancers in X-rays and MRI scans with accuracy matching or exceeding experienced radiologists. This improves diagnostic accuracy and significantly reduces analysis time.
+
+AI is also accelerating drug discovery. Traditional development takes over a decade and costs billions. AI-powered systems can identify potential drug candidates in a fraction of the time.
+
+However, integration raises ethical concerns: patient data privacy, algorithmic bias, and potential replacement of human judgment. Experts emphasize AI should assist, not replace, healthcare professionals. The human touch — empathy and understanding unique circumstances — remains irreplaceable.`,
+qs:[
+{q:"How does AI perform in medical imaging?",o:["A. Much less accurate than radiologists","B. Matches or exceeds radiologist accuracy","C. Only analyzes X-rays","D. Takes longer than traditional methods"],a:1,e:"第二段：accuracy that matches or even exceeds that of experienced radiologists。"},
+{q:"What advantage does AI offer in drug discovery?",o:["A. Makes drugs cheaper to manufacture","B. Eliminates clinical trials","C. Identifies candidates much faster","D. Guarantees drug effectiveness"],a:2,e:"第三段：identify potential drug candidates in a fraction of the time。"},
+{q:"What do experts emphasize about AI in healthcare?",o:["A. AI should replace doctors","B. AI should assist professionals","C. AI makes healthcare fully automated","D. AI has no ethical concerns"],a:1,e:"最后一段：AI should be viewed as a tool to assist healthcare professionals, not replace them。"}
+]}
+];
+
+const WRITES=[
+"For this part, write an essay on the importance of developing good habits. (120-180 words)",
+"For this part, write an essay on whether technology makes life simpler or more complicated. (120-180 words)",
+"For this part, write an essay on the importance of reading ability. (120-180 words)",
+"For this part, write an essay on advantages and disadvantages of online learning. (120-180 words)",
+"For this part, write an essay on the importance of teamwork. (120-180 words)",
+"For this part, write an essay on how to deal with pressure in modern life. (120-180 words)",
+"For this part, write an essay on the importance of physical exercise for students. (120-180 words)",
+"For this part, write an essay on whether students should take part-time jobs. (120-180 words)",
+"For this part, write an essay on the role of social media in society. (120-180 words)",
+"For this part, write an essay on the importance of environmental protection. (120-180 words)",
+];
+
+const TRANS=[
+{p:"中国结最初是由手工艺人发明的。经过数百年不断的改造，已经成为一种优雅多彩的艺术和工艺。在古代，人们用它来记录事件，但现在主要用于装饰。中国结通常由丝绸制成，每个结都由一根绳线编成，象征着长寿、财富和好运。",
+r:"The Chinese knot was originally invented by craftsmen. After hundreds of years of improvement, it has become an elegant art and craft. In ancient times, people used it to record events, but now it is mainly used for decoration. Usually made of silk, each knot is woven from a single rope, symbolizing longevity, wealth and good luck."},
+{p:"随着中国经济快速发展，越来越多外国人开始学习中文。许多大学开设了中文课程，一些国家甚至将中文纳入中小学必修课程。学习中文不仅有助于了解中国文化，也为个人职业发展提供更多机会。",
+r:"With the rapid development of China's economy, an increasing number of foreigners have begun to learn Chinese. Many universities have offered Chinese courses, and some countries have included Chinese as a compulsory course. Learning Chinese not only helps understand Chinese culture, but also provides more opportunities for career development."},
+{p:"移动支付在中国非常普遍。无论在大型商场还是街边小摊，消费者都可以用手机轻松完成支付。移动支付的普及不仅方便了日常生活，也推动了电子商务和共享经济的发展。",
+r:"Mobile payment has become very common in China. Whether in large malls or street stalls, consumers can easily pay using mobile phones. Its popularity has not only made daily life more convenient, but also promoted the development of e-commerce and the sharing economy."},
+{p:"中国的教育制度在过去几十年发生了巨大变化。高考仍然是中国最重要的考试之一，每年有数百万学生参加。近年来，教育改革更注重培养学生的创新能力和实践能力。",
+r:"China's education system has undergone tremendous changes over the past decades. The Gaokao remains one of the most important exams, with millions of students taking it yearly. Recent reforms place greater emphasis on cultivating students' innovative and practical abilities."},
+{p:"长城是中国最著名的历史遗迹，也是世界文化遗产。它始建于两千多年前，主要用于防御外敌入侵。长城全长超过两万公里，如今已成为中国最重要的旅游景点之一。",
+r:"The Great Wall is China's most famous historical site and a World Cultural Heritage. First built over 2,000 years ago, it mainly served for defense against foreign invasions. Stretching over 20,000 kilometers, it has become one of China's most important tourist attractions."},
+{p:"中国高铁网络是世界上最大的高速铁路系统，运营里程超过四万公里，连接了全国大部分主要城市。高铁大大缩短了城市间的旅行时间，也促进了沿线地区的经济发展。",
+r:"China's high-speed rail network is the world's largest, with over 40,000 kilometers connecting most major cities. High-speed trains have greatly reduced travel time and promoted economic development along the routes."},
+{p:"近年来，中国在环保方面做出了巨大努力。政府出台了一系列政策减少污染、保护生态环境。可再生能源使用量大幅增加，公众环保意识也在不断提高。",
+r:"In recent years, China has made tremendous efforts in environmental protection. The government has introduced policies to reduce pollution and protect the ecosystem. Renewable energy use has increased significantly, and public environmental awareness continues to improve."},
+{p:"春节是中国最重要的传统节日，通常在一月或二月庆祝。家人团聚吃年夜饭、放鞭炮、贴春联。红色象征好运和幸福。近年来，越来越多人通过手机发送电子红包。",
+r:"The Spring Festival is China's most important traditional holiday, usually celebrated in January or February. Families gather for reunion dinners, set off firecrackers, and post couplets. Red symbolizes good luck. Recently, more people send electronic red envelopes via mobile phones."},
+{p:"电子商务在中国发展迅速，已成为推动经济增长的重要力量。电商平台为消费者提供了便捷的购物体验。双十一购物节创造了惊人的销售记录，也改变了人们的消费习惯。",
+r:"E-commerce has developed rapidly in China and become an important force for economic growth. E-commerce platforms provide convenient shopping experiences. The Double Eleven festival creates astonishing sales records and has changed consumption habits."},
+{p:"中国茶文化有悠久历史，可追溯到几千年前。茶不仅是饮品，更是生活方式和文化象征。中国有多种茶叶，每种都有独特风味。品茶被认为是一种艺术，讲究水质、茶具和冲泡方法。",
+r:"Chinese tea culture has a long history dating back thousands of years. Tea is not just a beverage but a way of life and cultural symbol. China has many tea varieties, each with unique flavor. Tea tasting is considered an art emphasizing water quality, tea sets, and brewing methods."}
+];
+
+// ============ STATE ============
+let S={
+  day:0,done:new Set(),tasks:{},
+  fcI:0,known:new Set(),rev:[],
+  sc:[],tgt:500,
+  pmC:0,pmT:0,
+  ri:0,ra:{},
+  wi:0,ti:0,
+};
+
+function load(){try{const s=JSON.parse(localStorage.getItem('c4'));if(s){
+  S.done=new Set(s.done||[]);S.tasks=s.tasks||{};S.known=new Set(s.known||[]);
+  S.rev=s.rev||[];S.sc=s.sc||[];S.tgt=s.tgt||500;S.pmC=s.pmC||0;S.pmT=s.pmT||0;
+}}catch(e){}}
+function save(){localStorage.setItem('c4',JSON.stringify({
+  done:[...S.done],tasks:S.tasks,known:[...S.known],rev:S.rev,
+  sc:S.sc,tgt:S.tgt,pmC:S.pmC,pmT:S.pmT,
+}));}
+
+// ============ NAV ============
+document.querySelectorAll('.bottom-nav button').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.bottom-nav button').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    document.getElementById('s-'+b.dataset.s).classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+// ============ COUNTDOWN ============
+function updCD(){
+  const ex=new Date('2026-06-15'),t=new Date();t.setHours(0,0,0,0);
+  const d=Math.ceil((ex-t)/864e5);
+  document.getElementById('cd').textContent=Math.max(0,d);
+  S.day=Math.min(11,12-Math.max(0,d));
+}
+
+// ============ DAYS ============
+function renderDays(){
+  const c=document.getElementById('dayList');c.innerHTML='';
+  DAYS.forEach((dp,i)=>{
+    const dn=S.done.has(i),now=i===S.day,tk=S.tasks[i]||{},
+      dc=Object.values(tk).filter(Boolean).length;
+    const el=document.createElement('div');
+    el.className=`day-card${dn?' done':''}${now?' today':''}${now?' open':''}`;
+    el.innerHTML=`<div class="day-head" onclick="this.parentElement.classList.toggle('open')">
+      <div class="left"><span class="chevron">▶</span> ${dn?'✅':now?'📌':'⬜'} Day ${dp.d}</div>
+      <div class="right">${now?'今天':dn?'完成':''} ${dc}/${dp.tasks.length}</div>
+    </div><div class="day-body">
+      ${dp.tasks.map((t,j)=>`<div class="task">
+        <input type="checkbox" ${tk[j]?'checked':''} onchange="togTask(${i},${j},this.checked)">
+        <div class="txt ${tk[j]?'done':''}"><span class="tag ${TAG_CLS[t.t]}">${TAG_MAP[t.t]}</span>${t.x}</div>
+      </div>`).join('')}
+      ${!dn?`<button class="btn btn-g btn-sm" style="margin-top:12px;" onclick="doneDay(${i})">✅ 标记完成</button>`:''}
+    </div>`;
+    c.appendChild(el);
+  });
+  const pct=Math.round(S.done.size/12*100);
+  document.getElementById('progBar').style.width=pct+'%';
+  document.getElementById('progTxt').textContent=S.done.size+'/12 天';
+  document.getElementById('progPct').textContent=pct+'%';
+}
+function togTask(d,t,v){if(!S.tasks[d])S.tasks[d]={};S.tasks[d][t]=v;save();renderDays();}
+function doneDay(i){S.done.add(i);save();renderDays();toast('🎉 今日任务完成！');confetti();}
+
+// ============ FLASHCARD ============
+function renderFC(){
+  const w=W[S.fcI];
+  document.getElementById('fcW').textContent=w.w;
+  document.getElementById('fcP').textContent=w.p;
+  document.getElementById('fcM').textContent=w.m;
+  document.getElementById('fcE').textContent=w.ex;
+  document.getElementById('fcC').textContent=`${S.fcI+1} / ${W.length}`;
+  document.getElementById('fc').classList.remove('flipped');
+}
+function flipFC(){document.getElementById('fc').classList.toggle('flipped');}
+function fcAct(ok){
+  if(ok){S.known.add(S.fcI);S.rev=S.rev.filter(i=>i!==S.fcI);}
+  else if(!S.rev.includes(S.fcI))S.rev.push(S.fcI);
+  S.fcI=(S.fcI+1)%W.length;save();renderFC();updWS();
+}
+
+function renderWL(f){
+  const c=document.getElementById('wList');
+  const ws=f?W.filter(w=>w.w.includes(f.toLowerCase())||w.m.includes(f)):W;
+  c.innerHTML=ws.map(w=>{const i=W.indexOf(w),k=S.known.has(i);
+    return`<div class="wr"><span class="star ${k?'on':''}" onclick="togK(${i},this)">${k?'★':'☆'}</span><span class="w">${w.w}</span><span class="m">${w.m}</span></div>`;
+  }).join('');
+}
+function doSearch(){renderWL(document.getElementById('wSearch').value);}
+function togK(i,el){if(S.known.has(i)){S.known.delete(i);el.textContent='☆';el.classList.remove('on');}
+  else{S.known.add(i);el.textContent='★';el.classList.add('on');}save();updWS();}
+function updWS(){
+  document.getElementById('wKnown').textContent=S.known.size;
+  document.getElementById('wRev').textContent=S.rev.length;
+  document.getElementById('wNew').textContent=W.length-S.known.size-S.rev.length;
+}
+
+// ============ READING ============
+function renderRead(){
+  const a=READS[S.ri%READS.length],c=document.getElementById('readArea');
+  let h=`<div class="passage">${a.pass}</div>`;
+  a.qs.forEach((q,qi)=>{
+    const an=S.ra[S.ri+'_'+qi];
+    h+=`<div class="qb"><div class="q">${qi+1}. ${q.q}</div>
+    ${q.o.map((o,oi)=>{let cl='opt';
+      if(an!==undefined){if(oi===q.a)cl+=' correct';else if(oi===an&&oi!==q.a)cl+=' wrong';}
+      return`<div class="${cl}" onclick="selR(${qi},${oi})">${o}</div>`;
+    }).join('')}
+    <div class="ans ${an!==undefined?'show':''} ${an===q.a?'ok':'no'}" id="ra${qi}">
+    ${an!==undefined?(an===q.a?'✅ 正确！':'❌ 错误。'):''} ${q.e}</div></div>`;
+  });
+  c.innerHTML=h;
+}
+function selR(qi,oi){if(S.ra[S.ri+'_'+qi]!==undefined)return;S.ra[S.ri+'_'+qi]=oi;renderRead();}
+function checkRead(){READS[S.ri%READS.length].qs.forEach((_,qi)=>{if(S.ra[S.ri+'_'+qi]===undefined)S.ra[S.ri+'_'+qi]=-1;});renderRead();}
+function nextRead(){S.ri++;renderRead();}
+
+// ============ WRITING ============
+function renderWP(){document.getElementById('writeP').innerHTML=`<div class="tip tip-yellow">${WRITES[S.wi%WRITES.length]}</div>`;}
+function nextWP(){S.wi++;renderWP();document.getElementById('writeArea').value='';document.getElementById('wc').textContent='';}
+function countW(){
+  const t=document.getElementById('writeArea').value.trim();
+  if(!t){document.getElementById('wc').textContent='请输入内容';return;}
+  const en=(t.match(/[a-zA-Z]+/g)||[]).length,cn=(t.match(/[一-鿿]/g)||[]).length;
+  document.getElementById('wc').textContent=`英文${en}词 · 中文${cn}字 · 共${t.length}字符`;
+}
+
+// ============ TRANS ============
+function renderTR(){const it=TRANS[S.ti%TRANS.length];
+  document.getElementById('transP').innerHTML=`<div class="tip tip-pink">${it.p}</div>`;
+  document.getElementById('transRef').textContent=it.r;
+  document.getElementById('transRef').style.display='none';
+  document.getElementById('transArea').value='';
+}
+function showRef(){const r=document.getElementById('transRef');r.style.display=r.style.display==='none'?'block':'none';}
+function nextTR(){S.ti++;renderTR();}
+
+// ============ TIMER ============
+let tmI=null,tmS=1500,tmT=1500,tmR=false;
+function setTm(m){if(tmR)return;tmS=m*60;tmT=m*60;
+  document.getElementById('tmDisp').textContent=fmtT(tmS);
+  document.getElementById('tmLabel').textContent=m===5?'休息时间':'准备开始';
+  document.getElementById('tmProg').style.width='0';}
+function fmtT(s){return`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;}
+function toggleTm(){
+  if(tmR){clearInterval(tmI);tmR=false;document.getElementById('tmBtn').textContent='▶ 继续';}
+  else{tmR=true;document.getElementById('tmBtn').textContent='⏸ 暂停';
+    document.getElementById('tmLabel').textContent='专注中...';
+    tmI=setInterval(()=>{tmS--;
+      document.getElementById('tmDisp').textContent=fmtT(tmS);
+      document.getElementById('tmProg').style.width=((tmT-tmS)/tmT*100)+'%';
+      if(tmS<=0){clearInterval(tmI);tmR=false;
+        document.getElementById('tmBtn').textContent='▶ 开始';
+        document.getElementById('tmLabel').textContent='🎉 完成！';
+        S.pmC++;S.pmT+=Math.round(tmT/60);save();updPM();toast('🍅 番茄钟完成！');confetti();
+      }
+    },1000);}
+}
+function resetTm(){clearInterval(tmI);tmR=false;tmS=tmT;
+  document.getElementById('tmDisp').textContent=fmtT(tmS);
+  document.getElementById('tmBtn').textContent='▶ 开始专注';
+  document.getElementById('tmLabel').textContent='准备开始';
+  document.getElementById('tmProg').style.width='0';}
+function updPM(){document.getElementById('pmC').textContent=S.pmC;document.getElementById('pmT').textContent=S.pmT+' 分钟';}
+
+// ============ SCORE ============
+function addSc(){
+  const l=parseInt(document.getElementById('inL').value)||0,
+    r=parseInt(document.getElementById('inR').value)||0,
+    w=parseInt(document.getElementById('inW').value)||0,
+    t=parseInt(document.getElementById('inT').value)||0,total=l+r+w+t;
+  if(!total){toast('请输入成绩');return;}
+  S.sc.push({l,r,w,t,total,d:new Date().toLocaleDateString()});save();renderSc();
+  toast(`📝 总分: ${total}`);confetti();
+  ['inL','inR','inW','inT'].forEach(id=>document.getElementById(id).value='');
+}
+function renderSc(){
+  const sc=S.sc;
+  if(!sc.length){
+    document.getElementById('sBest').textContent='--';
+    document.getElementById('sAvg').textContent='--';
+    document.getElementById('sCnt').textContent='0';
+    document.getElementById('sGap').textContent='--';
+    document.getElementById('scHist').innerHTML='<div style="text-align:center;color:var(--text3);padding:20px;">暂无记录</div>';
+    renderWB(null);return;
+  }
+  const ts=sc.map(s=>s.total),best=Math.max(...ts),avg=Math.round(ts.reduce((a,b)=>a+b)/ts.length);
+  document.getElementById('sBest').textContent=best;
+  document.getElementById('sAvg').textContent=avg;
+  document.getElementById('sCnt').textContent=sc.length;
+  document.getElementById('sGap').textContent=(S.tgt-avg>0?'-':'+')+Math.abs(S.tgt-avg);
+  document.getElementById('scHist').innerHTML=sc.map((s,i)=>`<div class="stat"><span>第${i+1}次 (${s.d})</span><span>听${s.l} 阅${s.r} 写${s.w} 译${s.t} <strong style="color:${s.total>=425?'var(--green)':'var(--red)'};">总${s.total}</strong></span></div>`).join('');
+  renderWB(sc[sc.length-1]);
+}
+function renderWB(s){
+  const c=document.getElementById('weakBars');
+  if(!s){c.innerHTML='<div style="text-align:center;color:var(--text3);padding:20px;">录入成绩后显示</div>';return;}
+  [{lb:'听力',v:s.l,mx:248.5,cl:'#3B82F6'},{lb:'阅读',v:s.r,mx:248.5,cl:'#8B5CF6'},
+   {lb:'写作',v:s.w,mx:106.5,cl:'#FBBF24'},{lb:'翻译',v:s.t,mx:106.5,cl:'#F472B6'}
+  ].forEach(it=>{
+    const p=Math.round(it.v/it.mx*100);
+    c.innerHTML+=`<div class="wb"><span class="lb">${it.lb}</span><div class="bar"><div class="bf" style="width:${p}%;background:${it.cl};">${p}%</div></div><span class="val">${it.v}/${Math.round(it.mx)}</span></div>`;
+  });
+}
+function saveTgt(){S.tgt=parseInt(document.getElementById('tgtIn').value)||500;save();renderSc();toast('🎯 目标已更新');}
+
+// ============ FUN ============
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
+function confetti(){
+  const colors=['#6366F1','#F472B6','#34D399','#FBBF24','#22D3EE','#F87171'];
+  for(let i=0;i<30;i++){
+    const el=document.createElement('div');el.className='confetti';
+    el.style.left=Math.random()*100+'%';
+    el.style.background=colors[Math.floor(Math.random()*colors.length)];
+    el.style.animationDelay=Math.random()*0.5+'s';
+    el.style.animationDuration=(2+Math.random()*2)+'s';
+    el.style.width=(6+Math.random()*8)+'px';
+    el.style.height=(6+Math.random()*8)+'px';
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),4000);
+  }
+}
+function cpTpl(id){navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>toast('📋 已复制！'));}
+
+// ============ INIT ============
+function init(){
+  load();updCD();renderDays();renderFC();renderWL();updWS();
+  renderRead();renderWP();renderTR();renderSc();updPM();
+  document.getElementById('wSearch').addEventListener('keypress',e=>{if(e.key==='Enter')doSearch();});
+  document.getElementById('writeArea').addEventListener('input',()=>{});
+}
+init();
+</script>
+</body>
+</html>
