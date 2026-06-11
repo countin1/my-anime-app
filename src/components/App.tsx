@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import Sidebar from "./Sidebar";
 import HeroBanner from "./HeroBanner";
 import AnimeGrid from "./AnimeGrid";
@@ -10,12 +10,13 @@ import CETStudy from "./CETStudy";
 import SkillManager from "./SkillManager";
 import PolicyHub from "./PolicyHub";
 import AIAgentGuide from "./AIAgentGuide";
+import AILearning from "./AILearning";
 import { useTopAnime, useSeasonalAnime, useTrendingAnime, useAnimeSearch, useAnimeDetail } from "@/hooks/use-anime";
 import { useNovelSearch } from "@/hooks/use-novel";
 import { NOVEL_SOURCES } from "@/lib/novel-sources";
 import type { UnifiedAnime } from "@/types/unified";
 
-type ViewType = "home" | "trending" | "seasonal" | "novels" | "workflows" | "study" | "skills" | "policy" | "aiagent";
+type ViewType = "home" | "trending" | "seasonal" | "novels" | "workflows" | "study" | "skills" | "policy" | "aiagent" | "learning";
 
 export default function App() {
   const [view, setView] = useState<ViewType>("home");
@@ -78,6 +79,8 @@ export default function App() {
             <PolicyHub />
           ) : view === "aiagent" ? (
             <AIAgentGuide />
+          ) : view === "learning" ? (
+            <AILearning />
           ) : view === "novels" ? (
             /* 轻小说视图 */
             isSearching ? (

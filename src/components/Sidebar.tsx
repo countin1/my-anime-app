@@ -1,8 +1,7 @@
-import React from "react";
-import { Home, Flame, Tv, BookOpen, ClipboardList, BookOpenCheck, Puzzle, BarChart3, Menu, X, Bot } from "lucide-react";
+import { Home, Flame, Tv, BookOpen, ClipboardList, BookOpenCheck, Puzzle, BarChart3, Menu, X, Bot, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-type ViewType = "home" | "trending" | "seasonal" | "novels" | "workflows" | "study" | "skills" | "policy" | "aiagent";
+type ViewType = "home" | "trending" | "seasonal" | "novels" | "workflows" | "study" | "skills" | "policy" | "aiagent" | "learning";
 
 interface SidebarProps {
   currentView: string;
@@ -21,6 +20,7 @@ const navItems = [
   { id: "skills", label: "Skills", icon: Puzzle, group: "tools" },
   { id: "policy", label: "政策", icon: BarChart3, group: "tools" },
   { id: "aiagent", label: "AI Agent", icon: Bot, group: "tools" },
+  { id: "learning", label: "AI 学习", icon: Sparkles, group: "tools" },
 ];
 
 export default function Sidebar({ currentView, onNavigate, collapsed, onToggle }: SidebarProps) {
