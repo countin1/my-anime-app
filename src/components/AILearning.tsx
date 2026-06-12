@@ -2,7 +2,8 @@ import { useState } from "react";
 import {
   Sparkles, BookOpen, Code, Search, Cpu, Rocket,
   CheckCircle2, Lock, Unlock, ChevronDown, ChevronRight,
-  Copy, Check, Zap, Trophy, Target, Star
+  Copy, Check, Zap, Trophy, Target, Star,
+  Calendar, ExternalLink, GitBranch
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -228,10 +229,264 @@ function InterviewCard({ script }: { script: typeof INTERVIEW_SCRIPTS[0] }) {
   );
 }
 
+// ========== 学习计划数据 ==========
+const LEARNING_PLAN = [
+  {
+    week: "Week 1-2",
+    title: "Prompt 工程评测 + 自动优化",
+    icon: Sparkles,
+    color: "from-purple-500 to-pink-500",
+    days: [
+      {
+        day: "Day 1-2",
+        title: "基础对比：zero-shot vs CoT",
+        tasks: [
+          "理解 zero-shot / few-shot / CoT 的区别",
+          "运行 compare_prompts.py 对比两种策略",
+          "学习配对 t 检验和 Cohen's d 效应量",
+        ],
+        command: "python compare_prompts.py --max-questions 10 --score-mode rule",
+        status: "available",
+        interview: "我用配对 t 检验比较了 zero-shot 和 CoT，发现 CoT 在统计题上显著更优 (p<0.05)。",
+      },
+      {
+        day: "Day 3-4",
+        title: "组件分析：role/format/reasoning",
+        tasks: [
+          "理解 Prompt 的 4 个组件维度",
+          "运行 prompt_optimizer.py 做组件贡献分析",
+          "找出 professor + structured + cot 最优组合",
+        ],
+        command: "python prompt_optimizer.py --max-questions 15",
+        status: "available",
+        interview: "我做了组件贡献分析，发现 professor + structured + cot 组合在统计题上效果最优。",
+      },
+      {
+        day: "Day 5-6",
+        title: "贝叶斯优化：智能搜索最优模板",
+        tasks: [
+          "理解高斯过程和期望改进 (EI) 原理",
+          "运行 prompt_bayesian.py 做贝叶斯优化",
+          "对比网格搜索 vs 贝叶斯优化效率",
+        ],
+        command: "python prompt_bayesian.py --iterations 20 --max-questions 10",
+        status: "available",
+        interview: "贝叶斯优化只用 20 次迭代就找到接近最优配置，比网格搜索节省 60% API 调用。",
+      },
+      {
+        day: "Day 7-8",
+        title: "生成面试级报告",
+        tasks: [
+          "完整运行优化流程，生成统计报告",
+          "整理最优模板和提升幅度",
+          "练习面试话术",
+        ],
+        command: "python prompt_efficiency_compare.py --max-questions 10 --budget 30",
+        status: "available",
+        interview: "在统计题上比 baseline 提升 15%，Cohen's d = 0.73，配对 t 检验 p < 0.01。",
+      },
+    ],
+  },
+  {
+    week: "Week 3-4",
+    title: "大模型微调 (LoRA/QLoRA)",
+    icon: Cpu,
+    color: "from-orange-500 to-red-500",
+    days: [
+      {
+        day: "Day 9-10",
+        title: "学习 LoRA 原理",
+        tasks: [
+          "理解 LoRA 低秩分解的核心思想",
+          "学习 r/alpha/target_modules 参数含义",
+          "理解 QLoRA 4bit 量化如何省显存",
+        ],
+        command: "",
+        status: "available",
+        interview: "LoRA 把大矩阵分解成两个小矩阵，r=8 时只训练 0.4% 参数，减少 99.6%。",
+      },
+      {
+        day: "Day 11-12",
+        title: "准备训练数据",
+        tasks: [
+          "运行 finetune_data.py 生成 Chat 格式数据",
+          "理解数据增强（多表述变体）",
+          "学习分层划分 train/test",
+        ],
+        command: "python finetune_data.py --augment 3 --format chat",
+        status: "available",
+        interview: "我用数据增强把 80 道题扩展到 320 条训练样本，按维度分层划分保证分布一致。",
+      },
+      {
+        day: "Day 13-15",
+        title: "运行 LoRA 微调 (需 GPU)",
+        tasks: [
+          "配置 GPU 环境 (AutoDL/本地 3090)",
+          "运行 finetune_lora.py 微调 Qwen2.5-7B",
+          "尝试 QLoRA 4bit 量化",
+        ],
+        command: "python finetune_lora.py --model Qwen/Qwen2.5-7B --epochs 3 --qlora",
+        status: "locked",
+        interview: "用 QLoRA 4bit 量化后，7B 模型只需要 6GB 显存，RTX 3060 就能跑。",
+      },
+      {
+        day: "Day 16-18",
+        title: "微调前后对比评测",
+        tasks: [
+          "运行 finetune_eval.py 对比微调前后",
+          "配对 t 检验 + Cohen's d 效应量",
+          "按维度分析提升幅度",
+        ],
+        command: "python finetune_eval.py --base-model Qwen/Qwen2.5-7B --adapter-path ./finetune/output/checkpoint-xxx",
+        status: "locked",
+        interview: "微调后在统计知识维度上 Cohen's d = 0.73，p < 0.01，显著优于基座模型。",
+      },
+      {
+        day: "Day 19-20",
+        title: "整合 + 面试准备",
+        tasks: [
+          "整理完整 pipeline 文档",
+          "练习完整面试话术",
+          "准备 GitHub 项目展示",
+        ],
+        command: "",
+        status: "available",
+        interview: "我做了完整的 LLM 评测+优化 pipeline，有统计检验支撑，可复现、可量化。",
+      },
+    ],
+  },
+];
+
+function LearningDayCard({ day, stageColor }: { day: typeof LEARNING_PLAN[0]["days"][0]; stageColor: string }) {
+  const storageKey = `learning-tasks-${day.day}`;
+  const [expanded, setExpanded] = useState(false);
+  const [checkedTasks, setCheckedTasks] = useState<Record<number, boolean>>(() => {
+    try {
+      const saved = localStorage.getItem(storageKey);
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  const toggleTask = (idx: number) => {
+    setCheckedTasks(prev => {
+      const next = { ...prev, [idx]: !prev[idx] };
+      localStorage.setItem(storageKey, JSON.stringify(next));
+      return next;
+    });
+  };
+
+  const completedCount = Object.values(checkedTasks).filter(Boolean).length;
+  const totalTasks = day.tasks.length;
+  const progress = totalTasks > 0 ? (completedCount / totalTasks) * 100 : 0;
+
+  const statusConfig = {
+    available: { color: "border-white/10 bg-white/5", badge: "bg-green-500/20 text-green-400", label: "可学习" },
+    locked: { color: "border-gray-600/30 bg-gray-600/5", badge: "bg-gray-500/20 text-gray-400", label: "需 GPU" },
+    completed: { color: "border-cyan-400/30 bg-cyan-400/5", badge: "bg-cyan-500/20 text-cyan-400", label: "已完成" },
+  };
+  const config = statusConfig[day.status as keyof typeof statusConfig];
+
+  return (
+    <div className={`rounded-xl border ${config.color} overflow-hidden transition-all`}>
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="w-full flex items-center justify-between p-4 hover:bg-white/5 transition-colors"
+      >
+        <div className="flex items-center gap-3">
+          <div className={`size-10 rounded-lg bg-gradient-to-br ${stageColor} flex items-center justify-center`}>
+            <Calendar className="size-5 text-white" />
+          </div>
+          <div className="text-left">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-primary">{day.day}</span>
+              <span className={`text-[10px] px-2 py-0.5 rounded-full ${config.badge}`}>{config.label}</span>
+            </div>
+            <h3 className="font-bold text-sm">{day.title}</h3>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          {completedCount > 0 && (
+            <span className="text-xs text-muted-foreground">{completedCount}/{totalTasks}</span>
+          )}
+          {expanded ? <ChevronDown className="size-5 text-muted-foreground" /> : <ChevronRight className="size-5 text-muted-foreground" />}
+        </div>
+      </button>
+
+      {expanded && (
+        <div className="px-4 pb-4 space-y-3">
+          {/* 进度条 */}
+          {totalTasks > 0 && (
+            <div className="rounded-full bg-white/10 h-1.5 overflow-hidden">
+              <div
+                className={`h-full rounded-full bg-gradient-to-r ${stageColor} transition-all duration-300`}
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+          )}
+
+          {/* 任务清单 */}
+          <div className="space-y-2">
+            {day.tasks.map((task, idx) => (
+              <label key={idx} className="flex items-start gap-2 cursor-pointer group">
+                <input
+                  type="checkbox"
+                  checked={!!checkedTasks[idx]}
+                  onChange={() => toggleTask(idx)}
+                  className="mt-1 rounded border-white/20 bg-white/10"
+                />
+                <span className={`text-sm ${checkedTasks[idx] ? "line-through text-muted-foreground" : "text-foreground"} group-hover:text-primary transition-colors`}>
+                  {task}
+                </span>
+              </label>
+            ))}
+          </div>
+
+          {/* 运行命令 */}
+          {day.command && (
+            <div className="bg-black/30 rounded-lg p-3">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-[10px] text-muted-foreground uppercase">运行命令</span>
+                <Button
+                  variant="ghost" size="sm"
+                  onClick={() => navigator.clipboard.writeText(day.command)}
+                  className="h-5 px-1.5 text-[10px]"
+                >
+                  <Copy className="size-2.5 mr-1" /> 复制
+                </Button>
+              </div>
+              <code className="text-xs text-green-300 font-mono break-all">{day.command}</code>
+            </div>
+          )}
+
+          {/* 面试话术 */}
+          {day.interview && (
+            <div className="bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/20 rounded-lg p-3">
+              <div className="flex items-center gap-1.5 mb-1">
+                <Trophy className="size-3 text-yellow-400" />
+                <span className="text-[10px] font-bold text-yellow-400">面试话术</span>
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">{day.interview}</p>
+              <Button
+                variant="ghost" size="sm"
+                onClick={() => navigator.clipboard.writeText(day.interview)}
+                className="mt-1 h-5 px-1.5 text-[10px]"
+              >
+                <Copy className="size-2.5 mr-1" /> 复制
+              </Button>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ========== 主组件 ==========
 
 export default function AILearning() {
-  const [activeTab, setActiveTab] = useState<"skills" | "prompts" | "interview">("skills");
+  const [activeTab, setActiveTab] = useState<"skills" | "prompts" | "interview" | "plan">("skills");
 
   // 统计
   const totalSkills = SKILL_TREE.reduce((acc, s) => acc + s.skills.length, 0);
@@ -242,6 +497,7 @@ export default function AILearning() {
 
   const tabs = [
     { id: "skills" as const, label: "技能树", icon: Zap },
+    { id: "plan" as const, label: "学习计划", icon: Calendar },
     { id: "prompts" as const, label: "Prompt 模板", icon: Code },
     { id: "interview" as const, label: "面试话术", icon: Trophy },
   ];
@@ -311,6 +567,72 @@ export default function AILearning() {
           );
         })}
       </div>
+
+      {/* 学习计划 */}
+      {activeTab === "plan" && (
+        <div className="space-y-6">
+          {/* 概览 */}
+          <div className="rounded-xl border border-primary/20 bg-primary/5 p-4">
+            <div className="flex items-center gap-3 mb-3">
+              <Rocket className="size-6 text-primary" />
+              <div>
+                <h2 className="font-bold">4 周冲刺计划</h2>
+                <p className="text-xs text-muted-foreground">Prompt 优化 + LoRA 微调，面试能讲的两个高含金量方向</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="bg-white/5 rounded-lg p-3 text-center">
+                <div className="text-lg font-bold text-purple-400">Week 1-2</div>
+                <div className="text-xs text-muted-foreground">Prompt 工程评测</div>
+              </div>
+              <div className="bg-white/5 rounded-lg p-3 text-center">
+                <div className="text-lg font-bold text-orange-400">Week 3-4</div>
+                <div className="text-xs text-muted-foreground">LoRA/QLoRA 微调</div>
+              </div>
+            </div>
+          </div>
+
+          {/* GitHub 链接 */}
+          <a
+            href="https://github.com/countin1/scaling-potato/tree/main/project-B-model-benchmark"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-4 hover:bg-white/10 transition-all group"
+          >
+            <GitBranch className="size-5 text-muted-foreground group-hover:text-primary transition-colors" />
+            <div className="flex-1">
+              <span className="text-sm font-medium">scaling-potato/project-B-model-benchmark</span>
+              <p className="text-xs text-muted-foreground">所有脚本都在这个仓库里</p>
+            </div>
+            <ExternalLink className="size-4 text-muted-foreground group-hover:text-primary transition-colors" />
+          </a>
+
+          {/* 每周计划 */}
+          {LEARNING_PLAN.map((week, idx) => {
+            const Icon = week.icon;
+            return (
+              <div key={idx}>
+                <div className="flex items-center gap-3 mb-3">
+                  <div className={`size-10 rounded-xl bg-gradient-to-br ${week.color} flex items-center justify-center`}>
+                    <Icon className="size-5 text-white" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold text-primary">{week.week}</span>
+                    </div>
+                    <h2 className="text-lg font-bold">{week.title}</h2>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  {week.days.map((day, dIdx) => (
+                    <LearningDayCard key={dIdx} day={day} stageColor={week.color} />
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       {/* 技能树 */}
       {activeTab === "skills" && (

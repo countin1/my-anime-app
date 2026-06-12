@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Star, Play } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { formatScore } from "@/lib/utils";

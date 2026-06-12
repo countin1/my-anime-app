@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -39,10 +39,7 @@ export default function AnimeDetail({ anime, detail, episodes, loading, open, on
   const [activeTab, setActiveTab] = useState("watch");
   const [synopsisExpanded, setSynopsisExpanded] = useState(false);
 
-  if (!anime) {
-    if (open) onClose();
-    return null;
-  }
+  if (!anime) return null;
 
   const poster = anime.posterUrl || (detail?.images?.jpg?.large_image_url ?? "");
   const banner = anime.bannerUrl || null;
@@ -74,7 +71,7 @@ export default function AnimeDetail({ anime, detail, episodes, loading, open, on
   const scoreDisplay = formatScore(score);
 
   const openSource = (url: string) => {
-    window.electron.openExternal(url);
+    window.electron?.openExternal?.(url) ?? window.open(url, "_blank");
   };
 
   return (

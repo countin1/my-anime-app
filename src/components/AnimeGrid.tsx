@@ -1,4 +1,3 @@
-import React from "react";
 import { ChevronDown, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AnimeCard from "./AnimeCard";

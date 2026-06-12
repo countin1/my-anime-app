@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,7 +35,7 @@ interface Workflow {
   id: number;
   name: string;
   category: string;
-  icon: React.ReactNode;
+  icon: ReactNode;
   description: string;
   frequency: string;
   prompt: string;
@@ -356,7 +356,7 @@ export default function WorkflowHub() {
       <div>
         <h2 className="text-xl font-bold">交易枢纽工作流</h2>
         <p className="text-sm text-muted-foreground mt-1">
-          18 个工作流覆盖供应商开发、验货、成交、回款全链路。点击填写参数后复制 prompt 到 Claude Code 执行。
+          {WORKFLOWS.length} 个工作流覆盖供应商开发、验货、成交、回款全链路。点击填写参数后复制 prompt 到 Claude Code 执行。
         </p>
       </div>
 

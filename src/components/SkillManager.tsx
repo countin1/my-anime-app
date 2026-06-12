@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,6 +10,8 @@ import {
   CheckCircle,
   Clock,
   Star,
+  Github,
+  Zap,
 } from "lucide-react";
 
 interface SkillInfo {
@@ -17,30 +19,65 @@ interface SkillInfo {
   description: string;
   version: string;
   path: string;
+  stars?: string;
+  github?: string;
+  isNew?: boolean;
 }
 
 // Pre-defined skill metadata (from the video's 15 skills + local skills)
-const SKILL_META: Record<string, { description: string; category: string; icon: string }> = {
+const SKILL_META: Record<string, { description: string; category: string; icon: string; stars?: string; github?: string; isNew?: boolean }> = {
+  // === 🆕 GitHub 热门 AI 工具 (视频推荐) ===
+  "andrej-karpathy-skills": { description: "Karpathy Skills — 一个 CLAUDE.md 文件定义 AI 工作说明书，无需复杂配置，让 AI 按你的方式写代码", category: "GitHub 热门", icon: "🧠", stars: "173k", github: "multica-ai/andrej-karpathy-skills", isNew: true },
+  "codegraph": { description: "CodeGraph — 构建代码知识图谱，将项目整理成地图，帮助 AI 快速理解结构，节省 Token", category: "GitHub 热门", icon: "🗺️", stars: "47k", github: "colbymchenry/codegraph", isNew: true },
+  "understand-anything": { description: "Understand Anything — 代码库导航仪，生成代码地图，展示调用关系和模块职责，支持 20+ 平台", category: "GitHub 热门", icon: "🧭", stars: "57k", github: "Egonex-AI/Understand-Anything", isNew: true },
+  "presenton": { description: "Presenton — 开源版 Gamma，一句话生成专业 PPT，提供 API 可接入自动化工作流", category: "GitHub 热门", icon: "📊", stars: "8k", github: "presenton/presenton", isNew: true },
+  "nvidia-longlive": { description: "NVIDIA LongLive — NVFP4 量化技术实现实时长视频生成，压缩/并行推理/质量平衡", category: "GitHub 热门", icon: "🎬", stars: "2.2k", github: "NVlabs/LongLive", isNew: true },
+  "claude-plugins-official": { description: "Claude Plugins — 官方插件生态，连续霸榜 GitHub，直接嵌入工作流程", category: "GitHub 热门", icon: "🔌", stars: "29k", github: "anthropics/claude-plugins-official", isNew: true },
+
+  // === 📂 Skills 合集仓库 ===
+  "awesome-claude-code": { description: "Awesome Claude Code — 46k 星精选资源、skills、hooks、slash-commands、orchestrators", category: "Skills 合集", icon: "⭐", stars: "46k", github: "hesreallyhim/awesome-claude-code" },
+  "antigravity-awesome-skills": { description: "Antigravity — 1,527+ 可安装 agentic skills，覆盖开发/测试/安全/DevOps/产品", category: "Skills 合集", icon: "🌌", stars: "40k", github: "sickn33/antigravity-awesome-skills" },
+  "awesome-agent-skills": { description: "Awesome Agent Skills — 1000+ agent skills 合集，兼容多种 AI 编程工具", category: "Skills 合集", icon: "🤖", stars: "25k", github: "VoltAgent/awesome-agent-skills" },
+
+  // === 🎯 我的项目 ===
+  "my-anime-app": { description: "动漫流 — Electron + React 桌面应用，动漫浏览/观看/轻小说/AI 学习一体化", category: "我的项目", icon: "🎌" },
+  "scaling-potato": { description: "Scaling Potato — AI 工具合集：数据分析Agent / 大模型评测 / RAG知识库", category: "我的项目", icon: "🥔", github: "countin1/scaling-potato" },
+  "prompt-optimizer": { description: "Prompt 自动优化 — 网格搜索 + 贝叶斯优化找最优模板，统计题提升 15%", category: "我的项目", icon: "🎯", github: "countin1/scaling-potato" },
+  "finetune-lora": { description: "LoRA 微调 — Qwen2.5/LLaMA3 微调 + QLoRA 4bit 量化 + 超参搜索", category: "我的项目", icon: "🔧", github: "countin1/scaling-potato" },
+
+  // === 进化类 ===
   "self-improving-agent": { description: "AI 记住错误不再重犯，越用越聪明", category: "进化类", icon: "🧬" },
   "proactive-agent": { description: "AI 从被动变主动，支持定时任务", category: "进化类", icon: "🧬" },
+
+  // === 开发必备 ===
   "github": { description: "Claude 直接操作 GitHub 全流程", category: "开发必备", icon: "💻" },
   "superpowers": { description: "强制 TDD 开发流程", category: "开发必备", icon: "💻" },
   "waza": { description: "轻量路线，适合个人开发者", category: "开发必备", icon: "💻" },
+
+  // === 信息获取 ===
   "multi-search-engine": { description: "多引擎聚合搜索", category: "信息获取", icon: "🔍" },
   "peng-agent-browser": { description: "AI 操控浏览器", category: "信息获取", icon: "🔍" },
   "smart-summarize": { description: "网页/PDF/音频/视频多格式总结", category: "信息获取", icon: "🔍" },
+
+  // === 效率办公 ===
   "gog": { description: "Google 全家桶自动化", category: "效率办公", icon: "📊" },
   "notion": { description: "打通 Notion 笔记", category: "效率办公", icon: "📊" },
   "obsidian": { description: "打通 Obsidian 笔记", category: "效率办公", icon: "📊" },
+
+  // === 安全维护 ===
   "skill-vetter": { description: "安装新 Skill 前先做安全检查", category: "安全维护", icon: "🔒" },
   "auto-updater": { description: "自动更新已装 Skills", category: "安全维护", icon: "🔒" },
+
+  // === 蒸馏类 ===
   "colleague-skill": { description: "把对话记录蒸馏成 AI", category: "蒸馏类", icon: "🧪" },
   "bazi-pan-skill": { description: "八字排盘命理工具", category: "蒸馏类", icon: "🧪" },
+
+  // === 本地 ===
   "gstack": { description: "本地工具集", category: "本地", icon: "📦" },
   "pptx": { description: "PPT 生成工具", category: "本地", icon: "📦" },
 };
 
-const CATEGORIES = ["进化类", "开发必备", "信息获取", "效率办公", "安全维护", "蒸馏类", "本地"];
+const CATEGORIES = ["GitHub 热门", "Skills 合集", "我的项目", "进化类", "开发必备", "信息获取", "效率办公", "安全维护", "蒸馏类", "本地"];
 
 export default function SkillManager() {
   const [skills, setSkills] = useState<SkillInfo[]>([]);
@@ -63,12 +100,19 @@ export default function SkillManager() {
     setSkills(skillList);
   };
 
-  const openSkillsFolder = () => {
-    window.electron.openExternal("file:///" + (process.env.HOME || process.env.USERPROFILE || "") + "/.claude/skills");
+  const openSkillsFolder = async () => {
+    const homeDir = await window.electron?.getHomeDir?.();
+    if (homeDir) {
+      window.electron?.openExternal?.(`file:///${homeDir}/skills`);
+    }
   };
 
   const openClawHub = () => {
-    window.electron.openExternal("https://clawhub.ai/skills");
+    window.electron?.openExternal?.("https://clawhub.ai/skills");
+  };
+
+  const openGitHub = (repo: string) => {
+    window.electron?.openExternal?.(`https://github.com/${repo}`);
   };
 
   const filtered = skills.filter((s) => {
@@ -81,9 +125,12 @@ export default function SkillManager() {
     <div className="space-y-6">
       <div className="flex items-start justify-between">
         <div>
-          <h2 className="text-xl font-bold">Claude Code Skills</h2>
+          <h2 className="text-xl font-bold flex items-center gap-2">
+            <Zap className="size-5 text-amber-400" />
+            Claude Code Skills
+          </h2>
           <p className="text-sm text-muted-foreground mt-1">
-            已安装 {skills.length} 个 Skills，管理你的 AI 工具库
+            已安装 {skills.length} 个 Skills · 6 个 GitHub 热门工具 · 3 个 Skills 合集 · 1 个项目
           </p>
         </div>
         <div className="flex gap-2">
@@ -140,26 +187,55 @@ export default function SkillManager() {
           return (
             <div
               key={skill.name}
-              className="flex items-start gap-3 p-4 rounded-xl bg-secondary/30 border border-white/5 hover:border-primary/30 transition-all"
+              className={`flex items-start gap-3 p-4 rounded-xl border transition-all ${
+                meta?.isNew
+                  ? "bg-primary/5 border-primary/20 hover:border-primary/40"
+                  : "bg-secondary/30 border-white/5 hover:border-primary/30"
+              }`}
             >
-              <div className="size-10 rounded-lg bg-primary/10 flex items-center justify-center text-lg shrink-0">
+              <div className={`size-10 rounded-lg flex items-center justify-center text-lg shrink-0 ${
+                meta?.isNew ? "bg-primary/15" : "bg-primary/10"
+              }`}>
                 {meta?.icon || "📦"}
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
                   <h3 className="text-sm font-medium truncate">{skill.name}</h3>
-                  <CheckCircle className="size-3 text-green-400 shrink-0" />
+                  {meta?.isNew ? (
+                    <Badge className="text-[9px] px-1.5 py-0 bg-gradient-to-r from-amber-500 to-orange-500 border-0 text-white">
+                      NEW
+                    </Badge>
+                  ) : (
+                    <CheckCircle className="size-3 text-green-400 shrink-0" />
+                  )}
                 </div>
                 <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
                   {meta?.description || skill.description}
                 </p>
-                <div className="flex items-center gap-2 mt-1.5">
+                <div className="flex items-center gap-2 mt-1.5 flex-wrap">
                   {meta?.category && (
                     <Badge variant="outline" className="text-[10px] px-1.5 py-0">
                       {meta.category}
                     </Badge>
                   )}
-                  <span className="text-[10px] text-muted-foreground/50">{skill.version}</span>
+                  {meta?.stars && (
+                    <span className="inline-flex items-center gap-0.5 text-[10px] text-amber-400">
+                      <Star className="size-2.5 fill-amber-400" />
+                      {meta.stars}
+                    </span>
+                  )}
+                  {meta?.github && (
+                    <button
+                      onClick={() => openGitHub(meta.github!)}
+                      className="inline-flex items-center gap-0.5 text-[10px] text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      <Github className="size-2.5" />
+                      GitHub
+                    </button>
+                  )}
+                  {!meta?.github && (
+                    <span className="text-[10px] text-muted-foreground/50">{skill.version}</span>
+                  )}
                 </div>
               </div>
             </div>

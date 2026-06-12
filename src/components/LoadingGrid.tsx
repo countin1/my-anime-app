@@ -1,4 +1,3 @@
-import React from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function LoadingGrid({ count = 12 }: { count?: number }) {

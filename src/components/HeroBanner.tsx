@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Star, Play, ChevronLeft, ChevronRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -16,10 +16,22 @@ export default function HeroBanner({ anime, onSelect }: HeroBannerProps) {
 
   useEffect(() => {
     if (featured.length <= 1) return;
-    const timer = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % featured.length);
-    }, 6000);
-    return () => clearInterval(timer);
+    let timer: ReturnType<typeof setInterval>;
+    const start = () => {
+      timer = setInterval(() => {
+        setCurrent((prev) => (prev + 1) % featured.length);
+      }, 6000);
+    };
+    const stop = () => clearInterval(timer);
+    const onVisibility = () => {
+      if (document.hidden) stop(); else start();
+    };
+    start();
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => {
+      stop();
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
   }, [featured.length]);
 
   if (featured.length === 0) return null;
@@ -101,6 +113,7 @@ export default function HeroBanner({ anime, onSelect }: HeroBannerProps) {
           size="icon"
           className="rounded-full bg-black/40 hover:bg-black/60 text-white backdrop-blur-sm"
           onClick={() => go(-1)}
+          aria-label="上一张"
         >
           <ChevronLeft className="size-5" />
         </Button>
@@ -111,6 +124,7 @@ export default function HeroBanner({ anime, onSelect }: HeroBannerProps) {
           size="icon"
           className="rounded-full bg-black/40 hover:bg-black/60 text-white backdrop-blur-sm"
           onClick={() => go(1)}
+          aria-label="下一张"
         >
           <ChevronRight className="size-5" />
         </Button>
@@ -125,6 +139,7 @@ export default function HeroBanner({ anime, onSelect }: HeroBannerProps) {
               i === current ? "bg-primary w-5" : "bg-white/40 hover:bg-white/60"
             }`}
             onClick={() => setCurrent(i)}
+            aria-label={`跳转到第 ${i + 1} 张`}
           />
         ))}
       </div>

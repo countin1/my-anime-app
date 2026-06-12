@@ -135,12 +135,8 @@ export function useAnimeSearch(query: string): UseSearchResult {
               }
             }
           }
-          if (merged.length > 0) {
-            setResults(merged);
-            setError(null);
-          } else {
-            setError("搜索失败");
-          }
+          setResults(merged);
+          setError(null);
         }
       })
       .catch(() => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -19,9 +19,8 @@ export default function CETStudy() {
   }, []);
 
   const openInBrowser = () => {
-    window.electron.openExternal(
-      `${window.location.origin}/cet4-study.html`
-    );
+    const url = `${window.location.origin}/cet4-study.html`;
+    window.electron?.openExternal?.(url) ?? window.open(url, "_blank");
   };
 
   return (
@@ -50,7 +49,7 @@ export default function CETStudy() {
               display: "block",
             }}
             title="CET4 Study"
-            sandbox="allow-scripts"
+            sandbox="allow-scripts allow-same-origin"
           />
         ) : (
           <div className="h-64 flex items-center justify-center text-muted-foreground text-sm">

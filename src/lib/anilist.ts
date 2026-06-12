@@ -1,6 +1,29 @@
 import axios from "axios";
 import type { UnifiedAnime, AnimeStatus, AnimeType } from "@/types/unified";
 
+interface AniListMedia {
+  id: number;
+  idMal: number | null;
+  title: { romaji: string | null; english: string | null; native: string | null };
+  coverImage: { large: string } | null;
+  bannerImage: string | null;
+  episodes: number | null;
+  duration: number | null;
+  averageScore: number | null;
+  meanScore: number | null;
+  popularity: number | null;
+  favourites: number | null;
+  status: string | null;
+  format: string | null;
+  description: string | null;
+  genres: string[];
+  season: string | null;
+  seasonYear: number | null;
+  studios: { nodes: { name: string }[] } | null;
+  trailer: { site: string; id: string } | null;
+  nextAiringEpisode: { airingAt: number; timeUntilAiring: number; episode: number } | null;
+}
+
 const client = axios.create({
   baseURL: "https://graphql.anilist.co",
   timeout: 15000,
@@ -120,36 +143,32 @@ function mapType(format: string | null): AnimeType {
   }
 }
 
-function mapAnime(media: Record<string, unknown>): UnifiedAnime {
-  const title = media.title as Record<string, string | null>;
-  const trailer = media.trailer as { site: string; id: string } | null;
-  const studios = media.studios as { nodes: { name: string }[] } | null;
-
+function mapAnime(media: AniListMedia): UnifiedAnime {
   return {
     id: `anilist:${media.id}`,
     source: "anilist",
     sourceId: String(media.id),
-    malId: (media.idMal as number) || null,
-    title: title.native || title.romaji || title.english || "",
-    titleNative: title.native || "",
-    titleChinese: title.native || "",
-    titleEnglish: title.english || "",
-    titleRomaji: title.romaji || "",
-    posterUrl: (media.coverImage as { large: string })?.large || "",
-    bannerUrl: (media.bannerImage as string) || null,
-    score: media.averageScore ? (media.averageScore as number) / 10 : null,
-    episodes: (media.episodes as number) || null,
-    status: mapStatus(media.status as string),
-    type: mapType(media.format as string),
-    synopsis: (media.description as string) || "",
-    genres: (media.genres as string[]) || [],
-    year: (media.seasonYear as number) || null,
-    season: (media.season as string) || null,
-    trailer: trailer?.site === "youtube" ? { youtubeId: trailer.id } : null,
-    popularity: (media.popularity as number) || null,
-    favorites: (media.favourites as number) || null,
+    malId: media.idMal || null,
+    title: media.title.native || media.title.romaji || media.title.english || "",
+    titleNative: media.title.native || "",
+    titleChinese: media.title.native || "",
+    titleEnglish: media.title.english || "",
+    titleRomaji: media.title.romaji || "",
+    posterUrl: media.coverImage?.large || "",
+    bannerUrl: media.bannerImage || null,
+    score: media.averageScore ? media.averageScore / 10 : null,
+    episodes: media.episodes || null,
+    status: mapStatus(media.status),
+    type: mapType(media.format),
+    synopsis: media.description || "",
+    genres: media.genres || [],
+    year: media.seasonYear || null,
+    season: media.season || null,
+    trailer: media.trailer?.site === "youtube" ? { youtubeId: media.trailer.id } : null,
+    popularity: media.popularity || null,
+    favorites: media.favourites || null,
     duration: media.duration ? `${media.duration}分钟` : null,
-    studios: studios?.nodes?.map((n) => n.name) || [],
+    studios: media.studios?.nodes?.map((n) => n.name) || [],
     airedFrom: null,
     airedTo: null,
   };
@@ -165,7 +184,7 @@ async function graphqlQuery<T>(query: string, variables: Record<string, unknown>
 
 export async function searchAniList(query: string, page = 1, signal?: AbortSignal): Promise<{ items: UnifiedAnime[]; hasNext: boolean }> {
   const data = await graphqlQuery<{
-    Page: { media: Record<string, unknown>[]; pageInfo: { hasNextPage: boolean } };
+    Page: { media: AniListMedia[]; pageInfo: { hasNextPage: boolean } };
   }>(SEARCH_QUERY, { search: query, page, perPage: 20, type: "ANIME", sort: ["SEARCH_MATCH"] }, signal);
 
   return {
@@ -176,7 +195,7 @@ export async function searchAniList(query: string, page = 1, signal?: AbortSigna
 
 export async function getTrendingAniList(page = 1, signal?: AbortSignal): Promise<{ items: UnifiedAnime[]; hasNext: boolean }> {
   const data = await graphqlQuery<{
-    Page: { media: Record<string, unknown>[]; pageInfo: { hasNextPage: boolean } };
+    Page: { media: AniListMedia[]; pageInfo: { hasNextPage: boolean } };
   }>(TRENDING_QUERY, { page, perPage: 20 }, signal);
 
   return {
@@ -187,7 +206,7 @@ export async function getTrendingAniList(page = 1, signal?: AbortSignal): Promis
 
 export async function getTopAniList(page = 1, signal?: AbortSignal): Promise<{ items: UnifiedAnime[]; hasNext: boolean }> {
   const data = await graphqlQuery<{
-    Page: { media: Record<string, unknown>[]; pageInfo: { hasNextPage: boolean } };
+    Page: { media: AniListMedia[]; pageInfo: { hasNextPage: boolean } };
   }>(TOP_QUERY, { page, perPage: 20 }, signal);
 
   return {
@@ -207,7 +226,7 @@ export async function getSeasonalAniList(
   const currentSeason = season || getSeason(now.getMonth());
 
   const data = await graphqlQuery<{
-    Page: { media: Record<string, unknown>[]; pageInfo: { hasNextPage: boolean } };
+    Page: { media: AniListMedia[]; pageInfo: { hasNextPage: boolean } };
   }>(SEASONAL_QUERY, { page, perPage: 20, seasonYear: currentYear, season: currentSeason }, signal);
 
   return {

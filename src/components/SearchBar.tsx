@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Search, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -33,9 +33,10 @@ export default function SearchBar({ value, onChange, onSelect, mode = "anime" }:
     }
 
     let cancelled = false;
+    const controller = new AbortController();
     setSuggestLoading(true);
 
-    searchAniList(debouncedValue, 1)
+    searchAniList(debouncedValue, 1, controller.signal)
       .then((r) => {
         if (!cancelled) {
           setSuggestions(r.items.slice(0, 5));
@@ -46,7 +47,10 @@ export default function SearchBar({ value, onChange, onSelect, mode = "anime" }:
         if (!cancelled) setSuggestLoading(false);
       });
 
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
   }, [debouncedValue, mode]);
 
   useEffect(() => {

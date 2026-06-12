@@ -1,4 +1,3 @@
-import React from "react";
 import { ExternalLink } from "lucide-react";
 import type { NovelSource } from "@/types/novel";
 
@@ -11,7 +10,7 @@ interface NovelCardProps {
 
 export default function NovelCard({ source, searchUrl, query, index = 0 }: NovelCardProps) {
   const handleClick = () => {
-    window.electron.openExternal(searchUrl);
+    window.electron?.openExternal?.(searchUrl) ?? window.open(searchUrl, "_blank");
   };
 
   return (

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Play } from "lucide-react";
 
 interface VideoPlayerProps {
@@ -45,10 +45,9 @@ export default function VideoPlayer({ youtubeId, embedUrl, title }: VideoPlayerP
       <iframe
         src={src}
         title={title || "视频播放器"}
-        className="absolute inset-0 w-full h-full"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        className="absolute inset-0 w-full h-full border-0"
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
-        frameBorder={0}
       />
     </div>
   );

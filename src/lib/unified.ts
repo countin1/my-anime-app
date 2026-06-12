@@ -72,15 +72,12 @@ function normalizeForDedupe(str: string): string {
     .trim();
 }
 
-// Apply Chinese titles to items in-place
+// Apply Chinese titles, returning new objects to avoid mutation
 function applyChineseTitles(items: UnifiedAnime[]): UnifiedAnime[] {
-  for (const item of items) {
-    if (!item.titleChinese) {
-      item.titleChinese = getChineseTitle(item.titleRomaji, item.titleEnglish, item.titleNative);
-    }
-    item.title = item.titleChinese;
-  }
-  return items;
+  return items.map((item) => {
+    const titleChinese = item.titleChinese || getChineseTitle(item.titleRomaji, item.titleEnglish, item.titleNative);
+    return { ...item, titleChinese, title: titleChinese };
+  });
 }
 
 // Search across all sources

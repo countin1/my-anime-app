@@ -13,6 +13,11 @@ ipcMain.handle('open-external', (_event, url: string) => {
   }
 });
 
+// Expose home directory to renderer
+ipcMain.handle('get-home-dir', () => {
+  return app.getPath('home');
+});
+
 const createWindow = () => {
   const mainWindow = new BrowserWindow({
     width: 1200,
