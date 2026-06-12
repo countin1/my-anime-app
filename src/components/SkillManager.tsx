@@ -42,8 +42,9 @@ const SKILL_META: Record<string, { description: string; category: string; icon: 
   // === 🎯 我的项目 ===
   "my-anime-app": { description: "动漫流 — Electron + React 桌面应用，动漫浏览/观看/轻小说/AI 学习一体化", category: "我的项目", icon: "🎌" },
   "scaling-potato": { description: "Scaling Potato — AI 工具合集：数据分析Agent / 大模型评测 / RAG知识库", category: "我的项目", icon: "🥔", github: "countin1/scaling-potato" },
-  "prompt-optimizer": { description: "Prompt 自动优化 — 网格搜索 + 贝叶斯优化找最优模板，统计题提升 15%", category: "我的项目", icon: "🎯", github: "countin1/scaling-potato" },
-  "finetune-lora": { description: "LoRA 微调 — Qwen2.5/LLaMA3 微调 + QLoRA 4bit 量化 + 超参搜索", category: "我的项目", icon: "🔧", github: "countin1/scaling-potato" },
+  "promptforge": { description: "PromptForge — Prompt 自动优化框架，网格搜索 + 贝叶斯优化 + 遗传算法", category: "我的项目", icon: "🔥", github: "countin1/promptforge", isNew: true },
+  "loraforge": { description: "LoRAForge — 大模型微调 Pipeline，LoRA/QLoRA + 统计验证", category: "我的项目", icon: "🔧", github: "countin1/loraforge", isNew: true },
+  "scaling-potato": { description: "Scaling Potato — AI 工具合集：数据分析Agent / 大模型评测 / RAG知识库", category: "我的项目", icon: "🥔", github: "countin1/scaling-potato" },
 
   // === 进化类 ===
   "self-improving-agent": { description: "AI 记住错误不再重犯，越用越聪明", category: "进化类", icon: "🧬" },
