@@ -2,6 +2,7 @@
 
 interface ElectronAPI {
   openExternal: (url: string) => Promise<void>;
+  getHomeDir: () => Promise<string>;
 }
 
 declare interface Window {
