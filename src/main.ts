@@ -13,6 +13,11 @@ ipcMain.handle('open-external', (_event, url: string) => {
   }
 });
 
+// Handle openPath requests for local files/folders
+ipcMain.handle('open-path', (_event, path: string) => {
+  shell.openPath(path);
+});
+
 // Expose home directory to renderer
 ipcMain.handle('get-home-dir', () => {
   return app.getPath('home');
@@ -28,6 +33,8 @@ const createWindow = () => {
     autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: false,
+      contextIsolation: true,
     },
   });
 

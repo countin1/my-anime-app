@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, type ReactNode } from "react";
 import Sidebar from "./Sidebar";
 import HeroBanner from "./HeroBanner";
 import AnimeGrid from "./AnimeGrid";
@@ -15,14 +15,13 @@ import { useTopAnime, useSeasonalAnime, useTrendingAnime, useAnimeSearch, useAni
 import { useNovelSearch } from "@/hooks/use-novel";
 import { NOVEL_SOURCES } from "@/lib/novel-sources";
 import type { UnifiedAnime } from "@/types/unified";
-
-type ViewType = "home" | "trending" | "seasonal" | "novels" | "workflows" | "study" | "skills" | "policy" | "aiagent" | "learning";
+import type { ViewType } from "@/types/views";
 
 export default function App() {
   const [view, setView] = useState<ViewType>("home");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedAnime, setSelectedAnime] = useState<UnifiedAnime | null>(null);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => window.innerWidth < 768);
 
   const top = useTopAnime();
   const seasonal = useSeasonalAnime();
@@ -47,6 +46,113 @@ export default function App() {
     setSearchQuery("");
   }, []);
 
+  // Tool views (no anime data needed)
+  const toolViews: Partial<Record<ViewType, ReactNode>> = {
+    workflows: <WorkflowHub />,
+    study: <CETStudy />,
+    skills: <SkillManager />,
+    policy: <PolicyHub />,
+    aiagent: <AIAgentGuide />,
+    learning: <AILearning />,
+  };
+
+  const renderContent = (): ReactNode => {
+    // Tool views
+    if (toolViews[view]) return toolViews[view];
+
+    // Novel view
+    if (view === "novels") {
+      return isSearching ? (
+        <section className="space-y-4">
+          <h2 className="text-xl font-bold">搜索轻小说："{searchQuery}"</h2>
+          <p className="text-sm text-muted-foreground">选择一个源搜索阅读</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {novelSearch.links.map((link) => (
+              <NovelCard key={link.source.name} source={link.source} searchUrl={link.url} query={searchQuery} index={0} />
+            ))}
+          </div>
+        </section>
+      ) : (
+        <section className="space-y-6">
+          <div>
+            <h2 className="text-xl font-bold">轻小说</h2>
+            <p className="text-sm text-muted-foreground mt-1">搜索并阅读你喜欢的轻小说</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {NOVEL_SOURCES.map((source) => (
+              <NovelCard key={source.name} source={source} searchUrl={source.baseUrl} query="浏览首页" index={0} />
+            ))}
+          </div>
+        </section>
+      );
+    }
+
+    // Search results
+    if (isSearching) {
+      return (
+        <AnimeGrid
+          title={`搜索: "${searchQuery}"`}
+          anime={search.results}
+          loading={search.loading}
+          error={search.error}
+          onSelect={handleSelect}
+        />
+      );
+    }
+
+    // Anime views
+    const animeViews: Record<string, ReactNode> = {
+      home: (
+        <>
+          <HeroBanner anime={top.anime.slice(0, 5)} onSelect={handleSelect} />
+          <AnimeGrid
+            title="正在热播"
+            anime={seasonal.anime}
+            loading={seasonal.loading}
+            error={seasonal.error}
+            onSelect={handleSelect}
+            onLoadMore={seasonal.loadMore}
+            hasMore={seasonal.hasMore}
+            horizontal
+          />
+          <AnimeGrid
+            title="高分动漫"
+            anime={top.anime}
+            loading={top.loading}
+            error={top.error}
+            onSelect={handleSelect}
+            onLoadMore={top.loadMore}
+            hasMore={top.hasMore}
+          />
+        </>
+      ),
+      trending: (
+        <AnimeGrid
+          title="当前热门"
+          anime={trending.anime}
+          loading={trending.loading}
+          error={trending.error}
+          onSelect={handleSelect}
+          onLoadMore={trending.loadMore}
+          hasMore={trending.hasMore}
+        />
+      ),
+      seasonal: (
+        <AnimeGrid
+          title="本季新番"
+          anime={seasonal.anime}
+          loading={seasonal.loading}
+          error={seasonal.error}
+          onSelect={handleSelect}
+          onLoadMore={seasonal.loadMore}
+          hasMore={seasonal.hasMore}
+        />
+      ),
+    };
+
+    return animeViews[view] ?? null;
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Sidebar
@@ -69,107 +175,7 @@ export default function App() {
         )}
 
         <div className="px-4 md:px-6 pb-10 space-y-8 overflow-y-auto h-[calc(100vh-64px)]">
-          {view === "workflows" ? (
-            <WorkflowHub />
-          ) : view === "study" ? (
-            <CETStudy />
-          ) : view === "skills" ? (
-            <SkillManager />
-          ) : view === "policy" ? (
-            <PolicyHub />
-          ) : view === "aiagent" ? (
-            <AIAgentGuide />
-          ) : view === "learning" ? (
-            <AILearning />
-          ) : view === "novels" ? (
-            /* 轻小说视图 */
-            isSearching ? (
-              <section className="space-y-4">
-                <h2 className="text-xl font-bold">搜索轻小说："{searchQuery}"</h2>
-                <p className="text-sm text-muted-foreground">选择一个源搜索阅读</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {novelSearch.links.map((link, i) => (
-                    <NovelCard
-                      key={link.source.name}
-                      source={link.source}
-                      searchUrl={link.url}
-                      query={searchQuery}
-                      index={i}
-                    />
-                  ))}
-                </div>
-              </section>
-            ) : (
-              <section className="space-y-6">
-                <div>
-                  <h2 className="text-xl font-bold">轻小说</h2>
-                  <p className="text-sm text-muted-foreground mt-1">搜索并阅读你喜欢的轻小说</p>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {NOVEL_SOURCES.map((source, i) => (
-                    <NovelCard
-                      key={source.name}
-                      source={source}
-                      searchUrl={source.baseUrl}
-                      query="浏览首页"
-                      index={i}
-                    />
-                  ))}
-                </div>
-              </section>
-            )
-          ) : isSearching ? (
-            <AnimeGrid
-              title={`搜索: "${searchQuery}"`}
-              anime={search.results}
-              loading={search.loading}
-              error={search.error}
-              onSelect={handleSelect}
-            />
-          ) : view === "home" ? (
-            <>
-              <HeroBanner anime={top.anime.slice(0, 5)} onSelect={handleSelect} />
-              <AnimeGrid
-                title="正在热播"
-                anime={seasonal.anime}
-                loading={seasonal.loading}
-                error={seasonal.error}
-                onSelect={handleSelect}
-                onLoadMore={seasonal.loadMore}
-                hasMore={seasonal.hasMore}
-                horizontal
-              />
-              <AnimeGrid
-                title="高分动漫"
-                anime={top.anime}
-                loading={top.loading}
-                error={top.error}
-                onSelect={handleSelect}
-                onLoadMore={top.loadMore}
-                hasMore={top.hasMore}
-              />
-            </>
-          ) : view === "trending" ? (
-            <AnimeGrid
-              title="当前热门"
-              anime={trending.anime}
-              loading={trending.loading}
-              error={trending.error}
-              onSelect={handleSelect}
-              onLoadMore={trending.loadMore}
-              hasMore={trending.hasMore}
-            />
-          ) : (
-            <AnimeGrid
-              title="本季新番"
-              anime={seasonal.anime}
-              loading={seasonal.loading}
-              error={seasonal.error}
-              onSelect={handleSelect}
-              onLoadMore={seasonal.loadMore}
-              hasMore={seasonal.hasMore}
-            />
-          )}
+          {renderContent()}
         </div>
       </main>
 

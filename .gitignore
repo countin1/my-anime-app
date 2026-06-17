@@ -35,3 +35,9 @@ yarn-error.log*
 *.dmg
 *.exe
 *.AppImage
+
+# Vite cache
+.vite/
+
+# Tool artifacts
+.gstack/

@@ -342,7 +342,7 @@ export default function WorkflowHub() {
     if (!selectedWorkflow) return;
     let prompt = selectedWorkflow.prompt;
     for (const [key, value] of Object.entries(formValues)) {
-      prompt = prompt.replace(`{${key}}`, value || `[待填写]`);
+      prompt = prompt.replace(new RegExp(`\\{${key}\\}`, 'g'), value || `[待填写]`);
     }
 
     navigator.clipboard.writeText(prompt).then(() => {

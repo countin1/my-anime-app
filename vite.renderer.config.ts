@@ -12,13 +12,4 @@ export default defineConfig({
       { find: '@', replacement: path.resolve(__dirname, 'src') },
     ],
   },
-  server: {
-    proxy: {
-      '/api': {
-        target: 'https://api.jikan.moe/v4',
-        changeOrigin: true,
-        rewrite: (p) => p.replace(/^\/api/, ''),
-      },
-    },
-  },
 })

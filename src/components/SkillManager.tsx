@@ -43,7 +43,6 @@ const SKILL_META: Record<string, { description: string; category: string; icon: 
   "my-anime-app": { description: "动漫流 — Electron + React 桌面应用，动漫浏览/观看/轻小说/AI 学习一体化", category: "我的项目", icon: "🎌" },
   "scaling-potato": { description: "Scaling Potato — AI 工具合集：数据分析Agent / 大模型评测 / RAG知识库", category: "我的项目", icon: "🥔", github: "countin1/scaling-potato" },
   "llm-optimization-toolkit": { description: "LLM Optimization Toolkit — PromptForge + LoRAForge，大模型评测+优化工具包", category: "我的项目", icon: "🚀", github: "countin1/llm-optimization-toolkit", isNew: true },
-  "scaling-potato": { description: "Scaling Potato — AI 工具合集：数据分析Agent / 大模型评测 / RAG知识库", category: "我的项目", icon: "🥔", github: "countin1/scaling-potato" },
 
   // === 进化类 ===
   "self-improving-agent": { description: "AI 记住错误不再重犯，越用越聪明", category: "进化类", icon: "🧬" },
@@ -103,7 +102,7 @@ export default function SkillManager() {
   const openSkillsFolder = async () => {
     const homeDir = await window.electron?.getHomeDir?.();
     if (homeDir) {
-      window.electron?.openExternal?.(`file:///${homeDir}/skills`);
+      window.electron?.openPath?.(`${homeDir}/skills`);
     }
   };
 

@@ -1,7 +1,6 @@
 import { Home, Flame, Tv, BookOpen, ClipboardList, BookOpenCheck, Puzzle, BarChart3, Menu, X, Bot, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-type ViewType = "home" | "trending" | "seasonal" | "novels" | "workflows" | "study" | "skills" | "policy" | "aiagent" | "learning";
+import type { ViewType } from "@/types/views";
 
 interface SidebarProps {
   currentView: string;
@@ -10,7 +9,7 @@ interface SidebarProps {
   onToggle: () => void;
 }
 
-const navItems = [
+const navItems: { id: ViewType; label: string; icon: typeof Home; group: string }[] = [
   { id: "home", label: "首页", icon: Home, group: "anime" },
   { id: "trending", label: "热门", icon: Flame, group: "anime" },
   { id: "seasonal", label: "季番", icon: Tv, group: "anime" },
@@ -73,7 +72,7 @@ export default function Sidebar({ currentView, onNavigate, collapsed, onToggle }
             return (
               <button
                 key={item.id}
-                onClick={() => { onNavigate(item.id as ViewType); if (window.innerWidth < 768) onToggle(); }}
+                onClick={() => { onNavigate(item.id); if (window.innerWidth < 768) onToggle(); }}
                 className={`w-full flex items-center gap-3 transition-all duration-200 ${
                   collapsed ? "justify-center px-2 py-3" : "px-4 py-2.5"
                 } ${
@@ -101,7 +100,7 @@ export default function Sidebar({ currentView, onNavigate, collapsed, onToggle }
             return (
               <button
                 key={item.id}
-                onClick={() => { onNavigate(item.id as ViewType); if (window.innerWidth < 768) onToggle(); }}
+                onClick={() => { onNavigate(item.id); if (window.innerWidth < 768) onToggle(); }}
                 className={`w-full flex items-center gap-3 transition-all duration-200 ${
                   collapsed ? "justify-center px-2 py-3" : "px-4 py-2.5"
                 } ${

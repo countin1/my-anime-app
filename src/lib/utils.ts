@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /** Format a 0-10 scale score for display. Returns null if no score. */
-export function formatScore(score: number | null): string | null {
-  if (score == null) return null;
+export function formatScore(score: number | null | undefined): string | null {
+  if (score == null || isNaN(score)) return null;
   return score % 1 === 0 ? `${score}` : score.toFixed(1);
 }

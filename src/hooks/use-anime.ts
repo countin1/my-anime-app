@@ -6,6 +6,31 @@ import { translateSearchQuery } from "@/lib/chinese-titles";
 import type { UnifiedAnime } from "@/types/unified";
 import type { JikanAnimeFull, JikanEpisode } from "@/types/anime";
 
+// ========== Simple in-memory cache with TTL ==========
+interface CacheEntry<T> {
+  data: T;
+  timestamp: number;
+}
+
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+const listCache = new Map<string, CacheEntry<UnifiedAnime[]>>();
+const detailCache = new Map<string, CacheEntry<{ full: JikanAnimeFull; episodes: JikanEpisode[] }>>();
+
+function getCached<T>(cache: Map<string, CacheEntry<T>>, key: string): T | null {
+  const entry = cache.get(key);
+  if (!entry) return null;
+  if (Date.now() - entry.timestamp > CACHE_TTL) {
+    cache.delete(key);
+    return null;
+  }
+  return entry.data;
+}
+
+function setCache<T>(cache: Map<string, CacheEntry<T>>, key: string, data: T) {
+  cache.set(key, { data, timestamp: Date.now() });
+}
+
+// ========== Types ==========
 interface UseAnimeListResult {
   anime: UnifiedAnime[];
   loading: boolean;
@@ -16,6 +41,7 @@ interface UseAnimeListResult {
 
 // Generic factory for paginated anime list hooks
 function useAnimeList(
+  cacheKey: string,
   fetcher: (page: number, signal?: AbortSignal) => Promise<UnifiedAnime[]>,
   enabled = true,
 ): UseAnimeListResult {
@@ -27,35 +53,9 @@ function useAnimeList(
   const loadingRef = useRef(false);
   const abortRef = useRef<AbortController | null>(null);
 
-  const fetchPage = useCallback(async (p: number) => {
-    if (loadingRef.current) return;
-    loadingRef.current = true;
-    setLoading(true);
-
-    // Abort previous in-flight request
-    abortRef.current?.abort();
-    const controller = new AbortController();
-    abortRef.current = controller;
-
-    try {
-      const items = await fetcher(p, controller.signal);
-      setAnime((prev) => (p === 1 ? items : [...prev, ...items]));
-      setHasMore(items.length >= 15);
-      setError(null);
-    } catch (err: unknown) {
-      if (err instanceof Error && err.name === "AbortError") return;
-      setError("加载动漫数据失败");
-    } finally {
-      if (!controller.signal.aborted) {
-        setLoading(false);
-      }
-      loadingRef.current = false;
-    }
-  }, [fetcher]);
-
+  // Check cache on mount
   useEffect(() => {
     if (!enabled) {
-      // Reset stale state when disabled so re-enable starts fresh
       setAnime([]);
       setPage(1);
       setHasMore(true);
@@ -65,33 +65,90 @@ function useAnimeList(
       loadingRef.current = false;
       return;
     }
-    fetchPage(1);
+
+    const cached = getCached(listCache, `${cacheKey}_p1`);
+    if (cached) {
+      setAnime(cached);
+      setHasMore(cached.length >= 15);
+      setLoading(false);
+      return;
+    }
+
+    // Fetch page 1
+    if (loadingRef.current) return;
+    loadingRef.current = true;
+    setLoading(true);
+
+    abortRef.current?.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
+
+    fetcher(1, controller.signal)
+      .then((items) => {
+        if (!controller.signal.aborted) {
+          setAnime(items);
+          setHasMore(items.length >= 15);
+          setError(null);
+          setCache(listCache, `${cacheKey}_p1`, items);
+        }
+      })
+      .catch((err) => {
+        if (err instanceof Error && err.name === "AbortError") return;
+        if (!controller.signal.aborted) setError("加载动漫数据失败");
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setLoading(false);
+        loadingRef.current = false;
+      });
+
     return () => {
-      abortRef.current?.abort();
+      controller.abort();
       loadingRef.current = false;
     };
-  }, [fetchPage, enabled]);
+  }, [cacheKey, fetcher, enabled]);
 
   const loadMore = useCallback(() => {
     if (!hasMore || loadingRef.current) return;
-    const next = page + 1;
-    setPage(next);
-    fetchPage(next);
-  }, [page, hasMore, fetchPage]);
+    const nextPage = page + 1;
+    loadingRef.current = true;
+    setLoading(true);
+
+    abortRef.current?.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
+
+    fetcher(nextPage, controller.signal)
+      .then((items) => {
+        if (!controller.signal.aborted) {
+          setAnime((prev) => [...prev, ...items]);
+          setHasMore(items.length >= 15);
+          setError(null);
+          setPage(nextPage);
+        }
+      })
+      .catch((err) => {
+        if (err instanceof Error && err.name === "AbortError") return;
+        if (!controller.signal.aborted) setError("加载更多失败");
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setLoading(false);
+        loadingRef.current = false;
+      });
+  }, [page, hasMore, fetcher]);
 
   return { anime, loading, error, loadMore, hasMore };
 }
 
 export function useTopAnime(enabled = true): UseAnimeListResult {
-  return useAnimeList(getTop, enabled);
+  return useAnimeList("top", getTop, enabled);
 }
 
 export function useSeasonalAnime(enabled = true): UseAnimeListResult {
-  return useAnimeList(getSeasonal, enabled);
+  return useAnimeList("seasonal", getSeasonal, enabled);
 }
 
 export function useTrendingAnime(enabled = true): UseAnimeListResult {
-  return useAnimeList(getTrending, enabled);
+  return useAnimeList("trending", getTrending, enabled);
 }
 
 interface UseSearchResult {
@@ -109,6 +166,15 @@ export function useAnimeSearch(query: string): UseSearchResult {
   useEffect(() => {
     if (!debouncedQuery.trim()) {
       setResults([]);
+      setLoading(false);
+      return;
+    }
+
+    // Check cache
+    const cacheKey = `search_${debouncedQuery.toLowerCase()}`;
+    const cached = getCached(listCache, cacheKey);
+    if (cached) {
+      setResults(cached);
       setLoading(false);
       return;
     }
@@ -137,6 +203,7 @@ export function useAnimeSearch(query: string): UseSearchResult {
           }
           setResults(merged);
           setError(null);
+          setCache(listCache, cacheKey, merged);
         }
       })
       .catch(() => {
@@ -178,6 +245,15 @@ export function useAnimeDetail(malId: number | null, title?: string): UseDetailR
       return;
     }
 
+    const cacheKey = `detail_${malId || titleKey}`;
+    const cached = getCached(detailCache, cacheKey);
+    if (cached) {
+      setAnime(cached.full);
+      setEpisodes(cached.episodes);
+      setLoading(false);
+      return;
+    }
+
     let cancelled = false;
     const controller = new AbortController();
     setLoading(true);
@@ -208,6 +284,7 @@ export function useAnimeDetail(malId: number | null, title?: string): UseDetailR
         if (!cancelled) {
           setAnime(full);
           setEpisodes(eps);
+          setCache(detailCache, cacheKey, { full, episodes: eps });
         }
       })
       .catch((err) => {
